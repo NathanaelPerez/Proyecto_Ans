@@ -1,0 +1,339 @@
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<style>
+  /* Ajuste del espacio entre cards */
+  .row.g-4 > .col, 
+  .row.g-4 > div {
+    padding: 1rem; /* mayor espacio entre columnas */
+  }
+
+  /* Cards con sombra, bordes redondeados y colores más suaves y combinados */
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    transition: transform 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+  }
+
+  /* Colores personalizados para cards */
+  .bg-primary {
+    background-color: #3b82f6 !important; /* azul vivo más moderno */
+  }
+  .bg-success {
+    background-color: #10b981 !important; /* verde suave */
+  }
+
+  /* Card header con fuente más grande y negrita */
+  .card-header {
+    font-weight: 700;
+    font-size: 1.25rem;
+    background-color: rgba(255 255 255 / 0.15) !important;
+    border-bottom: 1px solid rgba(255 255 255 / 0.3);
+  }
+
+  /* Texto dentro de la card más legible */
+  .card-text strong {
+    font-weight: 600;
+  }
+  .card-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+    /* Headers para cada iteración */
+  .card-header-iter1 { background-color: #2563eb !important; color: white; }
+  .card-header-iter2 { background-color: #16a34a !important; color: white; }
+  .card-header-iter3 { background-color: #db2777 !important; color: white; }
+  .card-header-iter4 { background-color: #d97706 !important; color: white; }
+  .card-header-iter5 { background-color: #64748b !important; color: white; }
+  .card-header-iter6 { background-color: #059669 !important; color: white; }
+  .card-header-iter7 { background-color: #b45309 !important; color: white; }
+
+  /* Bodies para cada iteración */
+  .card-body-iter1 { background-color: #dbeafe; color: #1e40af; }
+  .card-body-iter2 { background-color: #dcfce7; color: #166534; }
+  .card-body-iter3 { background-color: #fce7f3; color: #9d174d; }
+  .card-body-iter4 { background-color: #fff7ed; color: #92400e; }
+  .card-body-iter5 { background-color: #e2e8f0; color: #334155; }
+  .card-body-iter6 { background-color: #d1fae5; color: #065f46; }
+  .card-body-iter7 { background-color: #fef3c7; color: #78350f; }
+</style>
+
+<div class="container py-4">
+
+  <h1 class="mb-4 text-center">Método de Bisección</h1>
+
+  <!-- Introducción -->
+<div class="text-center">
+  <p class="lead">
+    El método de bisección es una técnica numérica para encontrar raíces de funciones continuas que cambian de signo en un intervalo dado. 
+    Se basa en reducir iterativamente el intervalo donde se encuentra la raíz, dividiéndolo en mitades y seleccionando la sub-intervalo que contiene la raíz.
+  </p>
+</div>
+
+<!-- Características -->
+<div class="text-center mt-5">
+  <h2>Características del método</h2>
+</div>
+<div class="d-flex justify-content-center">
+  <ul class="text-start" style="max-width: 600px;">
+    <li>Requiere que la función sea continua en el intervalo inicial.</li>
+    <li>Se necesita que los valores en los extremos del intervalo tengan signos opuestos.</li>
+    <li>Garantiza convergencia, aunque puede ser lenta.</li>
+    <li>Es un método sencillo y fácil de implementar.</li>
+  </ul>
+</div>
+
+<!-- Ventajas y Desventajas en dos columnas -->
+<div class="row mt-4">
+  <div class="col-md-6">
+    <h2 class="text-center">Ventajas</h2>
+    <ul>
+      <li>Garantiza encontrar una raíz si existe y la función es continua.</li>
+      <li>Fácil de entender y programar.</li>
+      <li>No requiere derivadas ni información adicional sobre la función.</li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <h2 class="text-center">Desventajas</h2>
+    <ul>
+      <li>Puede ser lento en converger a la solución deseada.</li>
+      <li>No funciona si la función no cambia de signo en el intervalo inicial.</li>
+      <li>No da información sobre la multiplicidad de la raíz.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Algoritmo -->
+<div class="text-center mt-5">
+  <h2>Algoritmo paso a paso</h2>
+</div>
+<div class="d-flex justify-content-center">
+  <ol class="text-start" style="max-width: 700px;">
+    <li>Definir un intervalo inicial [<code>x_l</code>, <code>x_u</code>] donde <code>f(x_l)</code> y <code>f(x_u)</code> tengan signos opuestos.</li>
+    <li>Calcular el punto medio <code>x_r = (x_l + x_u)/2</code>.</li>
+    <li>Evaluar <code>f(x_r)</code>.</li>
+    <li>Determinar el subintervalo donde la raíz se encuentra:
+      <ul>
+        <li>Si <code>f(x_l)*f(x_r) &lt; 0</code>, la raíz está en <code>[x_l, x_r]</code>. Entonces <code>x_u = x_r</code>.</li>
+        <li>Si <code>f(x_r)*f(x_u) &lt; 0</code>, la raíz está en <code>[x_r, x_u]</code>. Entonces <code>x_l = x_r</code>.</li>
+      </ul>
+    </li>
+    <li>Calcular el error aproximado (si se desea).</li>
+    <li>Repetir los pasos hasta que el error sea menor al valor deseado o se alcance un número máximo de iteraciones.</li>
+  </ol>
+</div>
+
+  <!-- Ejemplo paso a paso -->
+  <h2 class="mt-5 mb-3">Ejemplo paso a paso</h2>
+  <p>
+    Encontrar la raíz de la función <code>f(x) = x³ - x - 2</code> en el intervalo <code>[1, 2]</code> usando el método de bisección con error relativo menor al 1%.
+  </p>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <!-- Iteración 1 -->
+  <div class="col">
+  <div class="card text-white bg-primary mb-3" style="max-width: 100%;">
+    <div class="card-header card-header-iter1 text-center">Iteración 1</div>
+    <div class="card-body card-body-iter1">
+      <p class="card-text">
+        <strong>xl = 1</strong><br>
+        <strong>xu = 2</strong><br>
+        <strong>xr = (1 + 2)/2 = 1.5</strong><br><br>
+
+        <strong>f(xl) = f(1) = -2</strong><br>
+        <strong>f(xu) = f(2) = 4</strong><br>
+        <strong>f(xr) = f(1.5) = 1.5³ - 1.5 - 2 = -0.125</strong><br><br>
+
+        <strong>f(xl) * f(xr) = (-2) * (-0.125) = 0.25 > 0</strong><br>
+        Se actualiza <strong>xl = xr</strong>.<br><br>
+
+        <strong>Error = |(xr_actual - xr_anterior)/xr_actual| × 100 = |(1.5 - 0) / 1.5| × 100 = 100%</strong>
+
+      </p>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Iteración 2 -->
+  <div class="col">
+    <div class="card text-white bg-primary mb-3" style="max-width: 100%;">
+      <div class="card-header card-header-iter2 text-center">Iteración 2</div>
+      <div class="card-body card-body-iter2">
+        <p class="card-text">
+          <strong>xl = 1.5</strong><br>
+          <strong>xu = 2</strong><br>
+          <strong>xr = (1.5 + 2)/2 = 1.75</strong><br><br>
+
+          <strong>f(xl) = f(1.5) = -0.125</strong><br>
+          <strong>f(xu) = f(2) = 4</strong><br>
+          <strong>f(xr) = f(1.75) = 1.75³ - 1.75 - 2 = 1.609375</strong><br><br>
+
+          <strong>f(xl) * f(xr) = (-0.125) * 1.609375 = -0.201172 < 0</strong><br>
+          Se actualiza <strong>xu = xr</strong>.<br><br>
+
+          <strong>Error = |(xr_actual - xr_anterior)/xr_actual| × 100 = |(1.75 - 1.5)/1.75| × 100 = 14.29%</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Iteración 3 -->
+  <div class="col">
+    <div class="card text-white bg-primary mb-3" style="max-width: 100%;">
+      <div class="card-header card-header-iter3 text-center">Iteración 3</div>
+      <div class="card-body card-body-iter3">
+        <p class="card-text">
+          <strong>xl = 1.5</strong><br>
+          <strong>xu = 1.75</strong><br>
+          <strong>xr = (1.5 + 1.75)/2 = 1.625</strong><br><br>
+
+          <strong>f(xl) = -0.125</strong><br>
+          <strong>f(xu) = 1.609375</strong><br>
+          <strong>f(xr) = 1.625³ - 1.625 - 2 = 0.666016</strong><br><br>
+
+          <strong>f(xl) * f(xr) = -0.125 * 0.666016 = -0.083252 < 0</strong><br>
+          Se actualiza <strong>xu = xr</strong>.<br><br>
+
+          <strong>Error = |(xr_actual - xr_anterior)/xr_actual| × 100 = |(1.625 - 1.75)/1.625| × 100 = 7.69%</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Iteración 4 -->
+  <div class="col">
+    <div class="card text-white bg-primary mb-3" style="max-width: 100%;">
+      <div class="card-header card-header-iter4 text-center">Iteración 4</div>
+      <div class="card-body card-body-iter4">
+        <p class="card-text">
+          <strong>xl = 1.5</strong><br>
+          <strong>xu = 1.625</strong><br>
+          <strong>xr = (1.5 + 1.625)/2 = 1.5625</strong><br><br>
+
+          <strong>f(xl) = f(1.5) = -0.125</strong><br>
+          <strong>f(xu) = f(1.625) = 0.666016</strong><br>
+          <strong>f(xr) = 1.5625³ - 1.5625 - 2 = 0.252197</strong><br><br>
+
+
+          <strong>f(xl) * f(xr) = -0.125 * 0.252197 = -0.031524 < 0</strong><br>
+          Se actualiza <strong>xu = xr</strong>.<br><br>
+
+          <strong>Error = |(xr_actual - xr_anterior)/xr_actual| × 100 = |(1.5625 - 1.625)/1.5625| × 100 = 4%</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Iteración 5 -->
+  <div class="col">
+    <div class="card text-white bg-primary mb-3" style="max-width: 100%;">
+      <div class="card-header card-header-iter5 text-center">Iteración 5</div>
+      <div class="card-body card-body-iter5">
+        <p class="card-text">
+          <strong>xl = 1.5</strong><br>
+          <strong>xu = 1.5625</strong><br>
+          <strong>xr = (1.5 + 1.5625)/2 = 1.53125</strong><br><br>
+
+          <strong>f(xl) = f(1.5) = -0.125</strong><br>
+          <strong>f(xu) = f(1.5625) = 0.252197</strong><br>
+          <strong>f(xr) = 1.53125³ - 1.53125 - 2 = 0.059112</strong><br><br>
+
+
+          <strong>f(xl) * f(xr) = -0.125 * 0.059112 = -0.007389 < 0</strong><br>
+          Se actualiza <strong>xu = xr</strong><br><br>
+
+          <strong>Error = |(xr_actual - xr_anterior)/xr_actual| × 100 = |(1.53125 - 1.5625)/1.53125| × 100 ≈ 2.04%</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Iteración 6 -->
+  <div class="col">
+    <div class="card text-white bg-primary mb-3" style="max-width: 100%;">
+      <div class="card-header card-header-iter6 text-center">Iteración 6</div>
+      <div class="card-body card-body-iter6">
+        <p class="card-text">
+          <strong>xl = 1.5</strong><br>
+          <strong>xu = 1.53125</strong><br>
+          <strong>xr = (1.5 + 1.53125)/2 = 1.515625</strong><br><br>
+
+          <strong>f(xl) = f(1.5) = -0.125</strong><br>
+          <strong>f(xu) = f(1.53125) = 0.059112</strong><br>
+          <strong>f(xr) = 1.515625³ - 1.515625 - 2 = -0.034878</strong><br><br>
+
+
+          <strong>f(xl) * f(xr) = -0.125 * (-0.034878) = 0.00436 > 0</strong><br>
+          Se actualiza <strong>xl = xr</strong><br><br>
+
+          <strong>Error = |(xr_actual - xr_anterior)/xr_actual| × 100 = |(1.515625 - 1.53125)/1.515625| × 100 ≈ 1.03%</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Iteración 7 -->
+  <div class="col mx-auto">
+    <div class="card text-white bg-success mb-3" style="max-width: 100%;">
+      <div class="card-header card-header-iter7 text-center">Iteración 7</div>
+      <div class="card-body card-body-iter7">
+        <p class="card-text">
+          <strong>xl = 1.515625</strong><br>
+          <strong>xu = 1.53125</strong><br>
+          <strong>xr = (1.515625 + 1.53125)/2 = 1.523438</strong><br><br>
+
+          <strong>f(xl) = f(1.515625) = -0.034878</strong><br>
+          <strong>f(xu) = f(1.53125) = 0.059112</strong><br>
+          <strong>f(xr) = 1.523438³ - 1.523438 - 2 = 0.012250</strong><br><br>
+
+
+          <strong>f(xl) * f(xr) = (-0.034878) * 0.012250 = -0.000427 < 0</strong><br>
+          Se actualiza <strong>xu = xr</strong><br><br>
+
+          <strong>Error = |(xr_actual - xr_anterior)/xr_actual| × 100 = |(1.523438 - 1.515625)/1.523438| × 100 ≈ 0.51%</strong>
+          <br><br>
+          ✅ <strong>¡Error relativo menor al 1%! Se detiene el proceso.</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Imagen con descarga -->
+  <div class="mt-5 text-center">
+    <img
+      src="{% static 'img/image.png' %}"
+      alt="Gráfico método de bisección ejemplo"
+      class="img-fluid rounded shadow"
+      style="max-width: 600px;"
+    />
+    <p class="mt-2 fst-italic">
+      Figura: Visualización del método de bisección aplicado a la función <code>f(x) = x³ - x - 2</code>.
+    </p>
+    <p>
+      <small>
+        Imagen del ejemplo
+        <a href="{% static 'img/image.png' %}" 
+          download="metodo_biseccion_ejemplo.png" 
+          style="color:rgb(189, 190, 190);">
+          Descargar imagen
+        </a>
+
+
+      </small>
+    </p>
+  </div>
+
+</div>
+{% endblock content %}
