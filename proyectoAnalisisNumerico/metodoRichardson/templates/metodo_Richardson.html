@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Método de Richardson</title>
+    <style>
+        body { background: #121212; color: #fff; font-family: Arial; padding: 2rem; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+        th, td { border: 1px solid #555; padding: 0.5rem; text-align: center; }
+        th { background: #333; }
+        h2 { color: #aaffaa; }
+        .paso { margin-bottom: 1.5rem; padding: 1rem; background: #1e1e1e; border-radius: 8px; }
+        ul { margin: 0; padding-left: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Método de Richardson</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Calcular</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    {% if resultado_final %}
+        <h2>Resultado final: {{ resultado_final|floatformat:10 }}</h2>
+    {% endif %}
+
+    {% if tabla %}
+        <h2>Tabla de iteraciones</h2>
+        <table>
+            <tr>
+                <th>Iteración</th>
+                <th>h</th>
+                <th>D1</th>
+                <th>D2</th>
+                <th>Resultado</th>
+                <th>Error (%)</th>
+            </tr>
+            {% for fila in tabla %}
+            <tr>
+                <td>{{ fila.iteracion }}</td>
+                <td>{{ fila.h }}</td>
+                <td>{{ fila.D1|floatformat:10 }}</td>
+                <td>{{ fila.D2|floatformat:10 }}</td>
+                <td>{{ fila.resultado|floatformat:10 }}</td>
+                <td>{{ fila.error|floatformat:10 }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if pasos %}
+        <h2>Solución paso a paso</h2>
+        {% for paso in pasos %}
+            <div class="paso">
+                <strong>Iteración {{ paso.iteracion }}:</strong><br>
+                <strong>Fórmula:</strong> {{ paso.formula }}<br>
+                <strong>Datos:</strong>
+                <ul>
+                    <li>D1 = {{ paso.datos.D1|floatformat:10 }}</li>
+                    <li>D2 = {{ paso.datos.D2|floatformat:10 }}</li>
+                    <li>h = {{ paso.datos.h }}</li>
+                </ul>
+                <strong>Fórmula con datos:</strong> {{ paso.sustitucion }}<br>
+                <strong>Resultado:</strong> {{ paso.resultado|floatformat:10 }}<br>
+                <strong>Error:</strong> {{ paso.error|floatformat:10 }} %<br>
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

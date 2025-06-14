@@ -1,0 +1,119 @@
+/* index.css limpio, solo layout */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: linear-gradient(to right, var(--pink), var(--yellow));
+    z-index: 1040;
+}
+
+.navbar-brand {
+    color: var(--text-light) !important;
+    font-weight: bold;
+}
+
+.profile-img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.layout {
+    display: flex;
+    flex: 1;
+    margin-top: 56px;
+    margin-bottom: 60px;
+    min-height: calc(100vh - 56px - 60px);
+}
+
+#sidebar {
+    width: 220px;
+    background: linear-gradient(to bottom, var(--dark-blue), var(--aqua));
+    padding-top: 1rem;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+#sidebar .nav-link {
+    color: var(--text-light);
+}
+
+#sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+#main-content {
+    flex-grow: 1;
+    padding: 2rem;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: var(--dark-blue);
+    color: white;
+    text-align: center;
+    line-height: 60px;
+    z-index: 1045;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.5);
+}
+
+/* Scroll personalizado */
+#sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+#sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 3px;
+}
+
+/* Botón de cerrar sesión */
+.btn-logout {
+    color: #fff;
+    border: 2px solid #fff;
+    background-color: transparent;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+    transition: 0.3s ease;
+}
+.btn-logout:hover {
+    background-color: #fff;
+    color: var(--dark-blue);
+    text-shadow: none;
+    box-shadow: 0 0 8px rgba(31, 64, 55, 0.9);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+        margin-top: 56px;
+        margin-bottom: 60px;
+    }
+
+    #sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 1rem;
+    }
+
+    #main-content {
+        padding: 1rem;
+    }
+
+    footer {
+        position: relative;
+        height: auto;
+        line-height: 1.5;
+        padding: 10px 0;
+    }
+}
