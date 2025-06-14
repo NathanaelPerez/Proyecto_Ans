@@ -1,0 +1,123 @@
+/* ============================
+   COLORES
+   ============================ */
+
+:root {
+  --pink: #F04770;
+  --peach: #F78C6A;
+  --yellow: #FFD167;
+  --aqua: #06D7A0;
+  --blue: #108AB1;
+  --dark-blue: #073A4B;
+
+  --text-dark: #222;
+  --text-light: #fff;
+  --bg-main: whitesmoke;
+  --radius: 10px;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+/* ============================
+   TEXTO
+   ============================ */
+.h1-rojo {
+    color: var(--pink);
+}
+.h2-rojo {
+    color: var(--pink);
+}
+.h3-rojo {
+    color: var(--pink);
+}
+
+/* ============================
+   FORMTATO
+   ============================ */
+body {
+  background-color: var(--bg-main);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-dark);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  color: var(--dark-blue);
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--pink);
+  text-decoration: underline;
+}
+
+/* ============================
+   BUTTONS
+   ============================ */
+
+.button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-weight: bold;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.button-primary {
+  background-color: var(--pink);
+  color: var(--text-light);
+}
+
+.button-primary:hover {
+  background-color: var(--dark-blue);
+}
+
+.button-secondary {
+  background-color: var(--aqua);
+  color: var(--text-light);
+}
+
+.button-secondary:hover {
+  background-color: var(--blue);
+}
+
+/* ============================
+   CONTAINERS & CARDS
+   ============================ */
+
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ============================
+   UTILITY CLASSES
+   ============================ */
+
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
