@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'richardson.css' %}">
+
+<div class="richardson-container">
+  <h1>Método de Extrapolación de Richardson</h1>
+
+  <section>
+    <h2>Introducción</h2>
+    <p>
+      El método de extrapolación de Richardson mejora la precisión de métodos numéricos al combinar resultados con distintos tamaños de paso.
+    </p>
+  </section>
+
+  <section>
+    <h2>Características</h2>
+    <ul>
+      <li>Utiliza aproximaciones con diferentes tamaños de paso.</li>
+      <li>Incrementa la precisión eliminando errores de orden conocido.</li>
+      <li>Se aplica en derivadas, integrales y más.</li>
+    </ul>
+  </section>
+
+  <section class="flex-card-row">
+    <div class="card card-col bg-primary text-white">
+      <div class="card-header">Ventajas</div>
+      <div class="card-body">
+        <ul class="card-text text-start">
+          <li>Incrementa la precisión del cálculo numérico.</li>
+          <li>Evita usar pasos excesivamente pequeños.</li>
+          <li>Es adaptable a varios métodos.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card card-col bg-success text-white">
+      <div class="card-header">Desventajas</div>
+      <div class="card-body">
+        <ul class="card-text text-start">
+          <li>Necesita conocer el orden del método base.</li>
+          <li>Mayor carga computacional por cálculos múltiples.</li>
+          <li>Puede ser sensible al redondeo en pasos muy pequeños.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Algoritmo paso a paso</h2>
+    <ol class="text-start" style="display:inline-block; text-align:left;">
+      <li>Calcular <code>G(h)</code> con un paso inicial <code>h</code>.</li>
+      <li>Calcular <code>G(h/2)</code>.</li>
+      <li>Aplicar:
+        <pre>R = G(h/2) + (G(h/2) - G(h)) / (2^p - 1)</pre>
+        donde <code>p</code> es el orden del método (ej. 2 para diferencias centradas).
+      </li>
+      <li>Repetir el proceso con pasos más pequeños si se desea mayor precisión.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Ejemplo paso a paso</h2>
+    <p>Derivar <code>f(x) = e^x</code> en <code>x = 1</code> usando diferencias centradas y extrapolación de Richardson (orden <code>p = 2</code>).</p>
+
+    <div class="card mb-3">
+      <div class="card-header card-header-iter1">Paso 1: Calcular G(h)</div>
+      <div class="card-body card-body-iter1">
+        <pre>
+G(h) = [f(1 + 0.1) - f(1 - 0.1)] / 0.2
+     = [e^1.1 - e^0.9] / 0.2
+     ≈ (3.00417 - 2.45960) / 0.2
+     ≈ 2.72285
+        </pre>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header card-header-iter1">Paso 2: Calcular G(h/2)</div>
+      <div class="card-body card-body-iter1">
+        <pre>
+G(h/2) = [f(1 + 0.05) - f(1 - 0.05)] / 0.1
+       = [e^1.05 - e^0.95] / 0.1
+       ≈ (2.85765 - 2.58571) / 0.1
+       ≈ 2.71944
+        </pre>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header card-header-iter1">Paso 3: Extrapolación</div>
+      <div class="card-body card-body-iter1">
+        <pre>
+R = 2.71944 + (2.71944 - 2.72285) / (2² - 1)
+  = 2.71944 - 0.00114
+  ≈ 2.71830
+
+Valor exacto: f'(1) = e^1 ≈ 2.71828
+        </pre>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}
