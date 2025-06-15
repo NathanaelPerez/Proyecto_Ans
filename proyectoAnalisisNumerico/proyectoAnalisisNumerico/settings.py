@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'metodoBiseccionInfo',
     'metodoRichardsonInfo',
     'metodoRichardson',
+    'sobreNosotros',
 
 ]
 

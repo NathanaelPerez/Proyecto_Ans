@@ -1,108 +1,76 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block extra_css %}
-<style>
-    body { font-family: Arial; }
-    .richardson-container {
-        padding: 2rem;
-        color: #fff;
-    }
-    .richardson-container table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 2rem;
-    }
-    .richardson-container th, 
-    .richardson-container td {
-        border: 1px solid #555;
-        padding: 0.5rem;
-        text-align: center;
-    }
-    .richardson-container th {
-        background: #333;
-    }
-    .richardson-container h1 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        color: #66ffcc;
-    }
-    .richardson-container h2 {
-        color: #aaffaa;
-        margin-top: 2rem;
-    }
-    .paso {
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-        background: #1e1e1e;
-        border-radius: 8px;
-    }
-    ul {
-        margin: 0;
-        padding-left: 20px;
-    }
-</style>
-{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="richardson-container">
-    <h1>Método de Richardson</h1>
+<div class="container mt-4">
+  <h2 class="mb-4">Método de Richardson</h2>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Calcular</button>
-    </form>
+  <form method="get">
+    <div class="form-group">
+      <label for="funcion">Función f(x):</label>
+      <input type="text" name="funcion" id="funcion" class="form-control" placeholder="Ej: sin(x)" value="{{ funcion|default:'' }}" required>
+    </div>
+    <div class="form-group">
+      <label for="x">Valor de x:</label>
+      <input type="number" step="any" name="x" id="x" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="h">Valor de h:</label>
+      <input type="number" step="any" name="h" id="h" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="tolerancia">Tolerancia (%):</label>
+      <input type="number" step="any" name="tolerancia" id="tolerancia" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Calcular</button>
+  </form>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+  {% if error %}
+    <div class="alert alert-danger mt-4">{{ error }}</div>
+  {% endif %}
 
-    {% if resultado_final %}
-        <h2>Resultado final: {{ resultado_final|floatformat:10 }}</h2>
-    {% endif %}
+  {% if tabla %}
+  <hr>
+  <h3>Tabla de Resultados</h3>
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th>Iteración</th>
+        <th>h</th>
+        <th>Diferencias centradas (D)</th>
+        <th>Richardson (R)</th>
+        <th>Error relativo (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for fila in tabla %}
+      <tr>
+        <td>{{ fila.iteracion }}</td>
+        <td>{{ fila.h }}</td>
+        <td>{{ fila.D }}</td>
+        <td>{{ fila.R|default:"---" }}</td>
+        <td>{{ fila.error|default:"---" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-    {% if tabla %}
-        <h2>Tabla de iteraciones</h2>
-        <table>
-            <tr>
-                <th>Iteración</th>
-                <th>h</th>
-                <th>D1</th>
-                <th>D2</th>
-                <th>Resultado</th>
-                <th>Error (%)</th>
-            </tr>
-            {% for fila in tabla %}
-            <tr>
-                <td>{{ fila.iteracion }}</td>
-                <td>{{ fila.h }}</td>
-                <td>{{ fila.D1|floatformat:10 }}</td>
-                <td>{{ fila.D2|floatformat:10 }}</td>
-                <td>{{ fila.resultado|floatformat:10 }}</td>
-                <td>{{ fila.error|floatformat:10 }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+  <h3 class="mt-4">Paso a Paso</h3>
+  {% for paso in pasos %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5><strong>Iteración {{ paso.iteracion }}</strong></h5>
+      <p><strong>Diferencias centradas:</strong><br>{{ paso.diferencias }}</p>
+      <p><strong>Richardson:</strong><br>{{ paso.richardson }}</p>
+      <p><strong>Error relativo:</strong><br>{{ paso.error }}</p>
+    </div>
+  </div>
+  {% endfor %}
 
-    {% if pasos %}
-        <h2>Solución paso a paso</h2>
-        {% for paso in pasos %}
-            <div class="paso">
-                <strong>Iteración {{ paso.iteracion }}:</strong><br>
-                <strong>Fórmula:</strong> {{ paso.formula }}<br>
-                <strong>Datos:</strong>
-                <ul>
-                    <li>D1 = {{ paso.datos.D1|floatformat:10 }}</li>
-                    <li>D2 = {{ paso.datos.D2|floatformat:10 }}</li>
-                    <li>h = {{ paso.datos.h }}</li>
-                </ul>
-                <strong>Fórmula con datos:</strong> {{ paso.sustitucion }}<br>
-                <strong>Resultado:</strong> {{ paso.resultado|floatformat:10 }}<br>
-                <strong>Error:</strong> {{ paso.error|floatformat:10 }} %<br>
-            </div>
-        {% endfor %}
-    {% endif %}
+  <h4 class="mt-5">Resultado Final</h4>
+  <p>La derivada estimada de <strong>f(x) = {{ funcion }}</strong> en <strong>x = {{ x }}</strong> es:</p>
+  <div class="alert alert-success">
+    <strong>{{ resultado }}</strong> con error menor o igual a {{ tolerancia }}%
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

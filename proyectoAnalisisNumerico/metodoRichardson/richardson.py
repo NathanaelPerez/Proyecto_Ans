@@ -1,60 +1,52 @@
+from sympy import symbols, sympify, lambdify
 import math
 
-def richardson_derivative(func_str, x, h_inicial, error_deseado):
-    from sympy import sympify, Symbol, lambdify
-
-    x_sym = Symbol('x')
-    f = sympify(func_str)
-    f_lambda = lambdify(x_sym, f, 'math')
+def metodo_richardson(f_str, x, h, tolerancia):
+    x_sym = symbols('x')
+    f_expr = sympify(f_str)
+    f = lambdify(x_sym, f_expr, 'math')
 
     tabla = []
     pasos = []
+    i = 0
+    error = float('inf')
+    D_anterior = 0
 
-    h = h_inicial
-    iteracion = 1
-    resultado_anterior = None
-    error_actual = float('inf')
+    while error > tolerancia:
+        h_i = h / (2**i)
 
-    while error_actual > error_deseado:
-        D1 = (f_lambda(x + h) - f_lambda(x - h)) / (2 * h)
-        D2 = (f_lambda(x + h / 2) - f_lambda(x - h / 2)) / (2 * (h / 2))
+        # Diferencias centradas
+        f_x_plus = f(x + h_i)
+        f_x_minus = f(x - h_i)
+        D = (f_x_plus - f_x_minus) / (2 * h_i)
 
-        richardson = D2 + (D2 - D1) / 3
-
-        if resultado_anterior is not None:
-            error_actual = abs((richardson - resultado_anterior) / richardson) * 100
+        # Extrapolación de Richardson
+        if i == 0:
+            R = D
+            error = float('inf')
         else:
-            error_actual = 100
+            R = D + (D - D_anterior) / (4**1 - 1)  # p = 1 para centradas
+            error = abs((R - D_anterior) / R) * 100
 
-        # Guardamos datos en tabla
         tabla.append({
-            'iteracion': iteracion,
-            'h': h,
-            'D1': D1,
-            'D2': D2,
-            'resultado': richardson,
-            'error': error_actual,
+            'iteracion': i + 1,
+            'h': round(h_i, 6),
+            'D': round(D, 6),
+            'R': round(R, 6) if i > 0 else None,
+            'error': round(error, 6) if i > 0 else None
         })
 
-        # Guardamos paso a paso
         pasos.append({
-            'iteracion': iteracion,
-            'formula': "D2 + (D2 - D1) / 3",
-            'datos': {
-                'D1': D1,
-                'D2': D2,
-                'h': h,
-            },
-            'sustitucion': f"{D2:.10f} + ({D2:.10f} - {D1:.10f}) / 3",
-            'resultado': richardson,
-            'error': error_actual
+            'iteracion': i + 1,
+            'diferencias': f"D = (f({x}+{h_i}) - f({x}-{h_i})) / (2*{h_i}) = ({f_x_plus} - {f_x_minus}) / {2*h_i} = {D}",
+            'richardson': f"R = D + (D - D_prev) / (4^1 - 1) = {D} + ({D} - {D_anterior}) / 3 = {R}" if i > 0 else "Primera iteración, sin extrapolación",
+            'error': f"Error relativo = |R - D_prev| / |R| * 100 = |{R} - {D_anterior}| / |{R}| * 100 = {error:.6f}%" if i > 0 else "No se calcula en la primera iteración"
         })
 
-        resultado_anterior = richardson
-        h /= 2
-        iteracion += 1
-
-        if iteracion > 20:  # Por seguridad
+        if error <= tolerancia:
             break
 
-    return tabla, pasos
+        D_anterior = D
+        i += 1
+
+    return tabla, pasos, R

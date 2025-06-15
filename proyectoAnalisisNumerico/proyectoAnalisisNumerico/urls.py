@@ -27,7 +27,8 @@ urlpatterns = [
     path('', include('registro.urls')),
     path('', include('metodoBiseccionInfo.urls')),
     path('', include('metodoRichardsonInfo.urls')),
-    path('', include('metodoRichardson.urls'))
+    path('', include('metodoRichardson.urls')),
+    path('', include('sobreNosotros.urls'))
 
 ]
 
