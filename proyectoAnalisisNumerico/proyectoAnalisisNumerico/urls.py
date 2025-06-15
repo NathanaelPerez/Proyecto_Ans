@@ -25,7 +25,11 @@ urlpatterns = [
     path('',include('home.urls')),
     path('', include('login.urls')),
     path('', include('registro.urls')),
-    path('', include('metodoBiseccionInfo.urls'))
+    path('', include('metodoBiseccionInfo.urls')),
+    path('', include('metodoRichardsonInfo.urls')),
+    path('', include('metodoRichardson.urls')),
+    path('', include('sobreNosotros.urls'))
+
 ]
 
 if settings.DEBUG:
