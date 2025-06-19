@@ -12,7 +12,7 @@
 
   --text-dark: #222;
   --text-light: #fff;
-  --bg-main: whitesmoke;
+  --bg-main: red;
   --radius: 10px;
   --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -22,13 +22,13 @@
    TEXTO
    ============================ */
 .h1-rojo {
-    color: var(--pink);
+    color: var(--yellow);
 }
 .h2-rojo {
-    color: var(--pink);
+    color: var(--yellow);
 }
 .h3-rojo {
-    color: var(--pink);
+    color: var(--yellow);
 }
 
 /* ============================
@@ -43,17 +43,21 @@ body {
 }
 
 h1, h2, h3 {
-  color: var(--dark-blue);
+  color: var(--pink);
+}
+
+h6 {
+  color: black;
 }
 
 a {
   color: var(--blue);
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 a:hover {
   color: var(--pink);
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* ============================
@@ -121,3 +125,4 @@ a:hover {
 .mb-1 {
   margin-bottom: 1rem;
 }
+

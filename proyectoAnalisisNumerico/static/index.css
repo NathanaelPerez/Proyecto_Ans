@@ -1,4 +1,4 @@
-/* index.css limpio, solo layout */
+/* Navbar */
 .navbar {
     position: fixed;
     top: 0;
@@ -22,22 +22,48 @@
     margin-left: 10px;
 }
 
+/* Layout */
 .layout {
     display: flex;
-    flex: 1;
     margin-top: 56px;
-    margin-bottom: 60px;
-    min-height: calc(100vh - 56px - 60px);
+    min-height: calc(100vh - 56px - 60px); /* Navbar + Footer */
+    transition: margin-left 0.3s ease;
 }
 
+/* Sidebar */
 #sidebar {
-    width: 220px;
-    background: linear-gradient(to bottom, var(--dark-blue), var(--aqua));
-    padding-top: 1rem;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 56px);
+    background-color: #f8f9fa;
+    transition: transform 0.3s ease;
     overflow-y: auto;
-    flex-shrink: 0;
+    z-index: 1000;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
+/* Sidebar oculto */
+#sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+/* Main content */
+#main-content {
+    margin-left: 250px;
+    flex-grow: 1;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Cuando sidebar está oculto, quitar margen izquierdo */
+.layout.sidebar-collapsed #main-content {
+    margin-left: 0 !important;
+}
+
+/* Links del sidebar */
 #sidebar .nav-link {
     color: var(--text-light);
 }
@@ -47,11 +73,7 @@
     color: #fff;
 }
 
-#main-content {
-    flex-grow: 1;
-    padding: 2rem;
-}
-
+/* Footer */
 footer {
     position: fixed;
     bottom: 0;
@@ -63,19 +85,9 @@ footer {
     text-align: center;
     line-height: 60px;
     z-index: 1045;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.5);
 }
 
-/* Scroll personalizado */
-#sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-#sidebar::-webkit-scrollbar-thumb {
-    background-color: rgba(255,255,255,0.3);
-    border-radius: 3px;
-}
-
-/* Botón de cerrar sesión */
+/* Botón cerrar sesión */
 .btn-logout {
     color: #fff;
     border: 2px solid #fff;
@@ -89,31 +101,4 @@ footer {
     color: var(--dark-blue);
     text-shadow: none;
     box-shadow: 0 0 8px rgba(31, 64, 55, 0.9);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .layout {
-        flex-direction: column;
-        margin-top: 56px;
-        margin-bottom: 60px;
-    }
-
-    #sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 1rem;
-    }
-
-    #main-content {
-        padding: 1rem;
-    }
-
-    footer {
-        position: relative;
-        height: auto;
-        line-height: 1.5;
-        padding: 10px 0;
-    }
 }
