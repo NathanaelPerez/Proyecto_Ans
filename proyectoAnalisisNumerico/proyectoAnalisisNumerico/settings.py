@@ -1,8 +1,8 @@
 from pathlib import Path
 import os
-import pymysql
+#import pymysql
 
-pymysql.install_as_MySQLdb()
+#pymysql.install_as_MySQLdb()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ======================
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'metodoRichardsonInfo',
     'metodoRichardson',
     'sobreNosotros',
+    'editarperfil'
 
 ]
 
@@ -78,11 +79,11 @@ WSGI_APPLICATION = 'proyectoAnalisisNumerico.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_analisisnumerico',            # el nombre de la base que creaste
-        'USER': 'root',                  # usuario por defecto en XAMPP
-        'PASSWORD': '',                  # sin contraseña por defecto
-        'HOST': '127.0.0.1',             # localhost
-        'PORT': '3306',                  # puerto por defecto MySQL
+        'NAME': 'db_analisisnumerico',
+        'USER': 'root',
+        'PASSWORD': '192002',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }

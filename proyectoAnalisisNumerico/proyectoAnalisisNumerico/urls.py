@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 
 
 urlpatterns = [
@@ -25,11 +26,13 @@ urlpatterns = [
     path('',include('home.urls')),
     path('', include('login.urls')),
     path('', include('registro.urls')),
+    path('', include('metodoBiseccion.urls')),
     path('', include('metodoBiseccionInfo.urls')),
     path('', include('metodoRichardsonInfo.urls')),
     path('', include('metodoRichardson.urls')),
-    path('', include('sobreNosotros.urls'))
-
+    path('', include('sobreNosotros.urls')),
+    path('editar-perfil/', include('editarperfil.urls')),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 ]
 
 if settings.DEBUG:

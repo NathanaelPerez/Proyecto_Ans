@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{% static 'global.css' %}">
     <link rel="stylesheet" href="{% static 'index.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <script src="https://unpkg.com/mathlive"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive.core.css">
 </head>
 <body>
 
@@ -24,10 +26,11 @@
                         {% if user.perfil.foto_perfil %}
                             <img src="{{ user.perfil.foto_perfil.url }}" alt="Foto de perfil" class="profile-img">
                         {% endif %}
-                        <form action="#" method="post" class="ms-3">
+                        <form action="{% url 'logout' %}" method="post" class="ms-3">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm btn-logout">Cerrar sesión</button>
                         </form>
+
                     </div>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-outline-light">Iniciar sesión</a>
@@ -40,12 +43,13 @@
     <div class="layout">
         <nav id="sidebar" class="d-flex flex-column">
             <a href="{% url 'home' %}" class="nav-link px-3 py-2">Home</a>
-            <a href="#" class="nav-link px-3 py-2">Método Bisección</a>
+            <a href="{% url 'metodo_biseccion' %}" class="nav-link px-3 py-2">Método Bisección</a>
             <a href="{% url 'informativa_biseccion' %}" class="nav-link px-3 py-2">Método Bisección Info</a>
             <a href="{% url 'metodo_richardson' %}" class="nav-link px-3 py-2">Método Richardson</a>
             <a href="{% url 'informativa_Richardson' %}" class="nav-link px-3 py-2">Método Richardson Info</a>
             <a href="#" class="nav-link px-3 py-2">Mis procesos</a>
             <a href="{% url 'sobre_Nosotros' %}" class="nav-link px-3 py-2">Sobre Nosotros</a>
+            <a href="{% url 'editar_perfil' %}" class="nav-link px-3 py-2">Editar Perfil</a>
         </nav>
 
         <main id="main-content">
