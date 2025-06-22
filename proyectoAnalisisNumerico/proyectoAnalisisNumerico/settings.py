@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Tus apps
+    # Apps creadas por nosotros
     'login',
     'registro',
     'widget_tweaks',
@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'metodoRichardsonInfo',
     'metodoRichardson',
     'sobreNosotros',
-    'editarperfil'
+    'editarperfil',
+    'historial',
 
 ]
 

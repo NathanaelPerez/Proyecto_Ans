@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Historial de Cálculos</h2>
+<table border="1">
+    <tr>
+        <th>Fecha</th>
+        <th>Método</th>
+        <th>Función</th>
+        <th>Resultado</th>
+    </tr>
+    {% for h in historial %}
+    <tr>
+        <td>{{ h.fecha }}</td>
+        <td>{{ h.get_metodo_display }}</td>
+        <td>{{ h.funcion }}</td>
+        <td>{{ h.resultado }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No hay cálculos registrados.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
