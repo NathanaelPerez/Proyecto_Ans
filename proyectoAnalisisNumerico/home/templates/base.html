@@ -9,68 +9,6 @@
     <link rel="stylesheet" href="{% static 'global.css' %}">
     <link rel="stylesheet" href="{% static 'index.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-    <style>
-      /* Aquí añado las reglas CSS claves para el sidebar toggle */
-      /* Navbar fijo */
-      .navbar {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 56px;
-          background: linear-gradient(to right, var(--pink), var(--yellow));
-          z-index: 1040;
-      }
-
-      /* Layout flex */
-      .layout {
-          display: flex;
-          margin-top: 56px;
-          min-height: calc(100vh - 56px - 60px);
-      }
-
-      /* Sidebar fijo */
-      #sidebar {
-          position: fixed;
-          top: 56px;
-          left: 0;
-          width: 250px;
-          height: calc(100vh - 56px);
-          background-color: #f8f9fa;
-          transition: transform 0.3s ease;
-          overflow-y: auto;
-          z-index: 1000;
-          padding: 1rem;
-          box-sizing: border-box;
-      }
-
-      /* Sidebar oculto con transform */
-      #sidebar.collapsed {
-          transform: translateX(-100%);
-      }
-
-      /* Main content con margen para sidebar */
-      #main-content {
-          margin-left: 250px;
-          flex-grow: 1;
-          padding: 20px;
-          transition: margin-left 0.3s ease;
-      }
-
-      /* Cuando layout tiene sidebar colapsado, main ocupa todo */
-      .layout.sidebar-collapsed #main-content {
-          margin-left: 0 !important;
-      }
-
-      /* Otros estilos (opcional, tu CSS existente) */
-      #sidebar .nav-link {
-          color: var(--text-light);
-      }
-      #sidebar .nav-link:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          color: #fff;
-      }
-    </style>
 </head>
 <body>
 
