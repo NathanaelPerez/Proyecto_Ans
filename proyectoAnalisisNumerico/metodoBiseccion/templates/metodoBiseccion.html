@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block title %}Metodo Bisección | Análisis Numérico{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="mb-4 fw-bold text-center">Método de Bisección</h1>
+
+    <form method="post" class="container py-3">
+        {% csrf_token %}
+
+        <!-- Fila superior: Editor visual centrado -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 col-md-6 text-center">
+                <label class="form-label text-center w-100 fw-bold">Editor visual de función (tipo Symbolab)</label>
+                <math-field id="editor-math" virtual-keyboard-mode="onfocus"></math-field>
+            </div>
+        </div>
+
+        <!-- Fila inferior: Inputs de función, xl, xu, error -->
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-3 text-center">
+                <label class="form-label w-100 fw-bold">f(x)</label>
+                <input type="text" name="funcion" id="funcion-input" value="{{ funcion }}" class="form-control" required>
+            </div>
+            <div class="col-12 col-md-2 text-center">
+                <label class="form-label w-100 fw-bold">xl</label>
+                <input type="number" step="any" name="xl" value="{{ xl }}" class="form-control" required>
+            </div>
+            <div class="col-12 col-md-2 text-center">
+                <label class="form-label w-100 fw-bold">xu</label>
+                <input type="number" step="any" name="xu" value="{{ xu }}" class="form-control" required>
+            </div>
+            <div class="col-12 col-md-2 text-center">
+                <label class="form-label w-100 fw-bold">Error (%)</label>
+                <input type="number" step="any" name="ea" value="{{ ea }}" class="form-control" required>
+            </div>
+            <div class="col-12 col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100 fw-bold">Calcular</button>
+            </div>
+        </div>
+    </form>
+
+
+    {% if resultado %}
+    <hr>
+    <h4>Resultado: {{ resultado|floatformat:6 }}</h4>
+    <p>Iteraciones: {{ num_iter }}</p>
+
+    {% if iteraciones %}
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr>
+                    <th>Iteración</th>
+                    <th>xl</th>
+                    <th>xu</th>
+                    <th>xr</th>
+                    <th>f(xl)</th>
+                    <th>f(xu)</th>
+                    <th>f(xr)</th>
+                    <th>Error (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for it in iteraciones %}
+                <tr>
+                    <td>{{ it.iter }}</td>
+                    <td>{{ it.xl|floatformat:4 }}</td>
+                    <td>{{ it.xu|floatformat:4 }}</td>
+                    <td>{{ it.xr|floatformat:4 }}</td>
+                    <td>{{ it.f_xl|floatformat:4 }}</td>
+                    <td>{{ it.f_xu|floatformat:4 }}</td>
+                    <td>{{ it.f_xr|floatformat:4 }}</td>
+                    <td>{{ it.ea|floatformat:4 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if iteraciones %}
+        <div class="text-center mt-4">
+            <button id="btn-ver-proceso" class="btn btn-success">Ver proceso</button>
+        </div>
+
+        <br>
+        
+
+        <div id="contenedor-procesos" class="row mt-4 d-none">
+            {% for it in iteraciones %}
+            <div class="card mb-3">
+                <div class="card-body">
+                <h3 class="card-title text-center fw-bold">Iteración {{ it.iter }}</h3>
+                <div class="proceso-latex">
+                    {{ it.proceso|safe }}
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="text-center mt-3 d-none" id="cerrar-proceso-btn">
+            <button class="btn btn-danger" onclick="ocultarProceso()">Cerrar</button>
+        </div>
+        <br>
+
+        {% endif %}
+
+    </div>
+
+        <br>
+        <br>
+
+    {% if grafica %}
+    <div class="text-center">
+        <img src="data:image/png;base64,{{ grafica }}" class="img-fluid" />
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+</div>
+
+<script>
+    const verProcesoBtn = document.getElementById('btn-ver-proceso');
+    const contenedorProcesos = document.getElementById('contenedor-procesos');
+    const cerrarProcesoBtn = document.getElementById('cerrar-proceso-btn');
+
+    verProcesoBtn?.addEventListener('click', function () {
+        contenedorProcesos.classList.remove('d-none');
+        cerrarProcesoBtn.classList.remove('d-none');
+        verProcesoBtn.classList.add('d-none');
+    });
+
+    function ocultarProceso() {
+        contenedorProcesos.classList.add('d-none');
+        cerrarProcesoBtn.classList.add('d-none');
+        verProcesoBtn.classList.remove('d-none');
+    }
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<script>
+function latexToSympy(latex) {
+      // Primero convertimos las funciones con nombre completo
+    latex = latex
+        .replace(/\\cdot|\\times/g, '*')
+        .replace(/\\div/g, '/')
+        .replace(/\\frac{([^}]*)}{([^}]*)}/g, '($1)/($2)')
+        .replace(/([a-zA-Z])\^([0-9]+)/g, '$1**$2')
+        .replace(/\\sqrt{([^}]*)}/g, 'sqrt($1)')
+        .replace(/\\left\(|\\right\)/g, '')
+        .replace(/\\pi/g, 'pi')
+        .replace(/\\log\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'log($1)')
+        .replace(/\\ln\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'log($1)')
+        .replace(/\\sin\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'sin($1)')
+        .replace(/\\cos\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'cos($1)')
+        .replace(/\\tan\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'tan($1)')
+        .replace(/\\exp\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'exp($1)');
+
+    // Ahora, para insertar el * entre variables, pero sólo entre variables simples (una letra),
+    // y evitar insertar entre funciones conocidas como 'log', 'sin', 'cos', 'tan', 'exp'
+    // Entonces, se hace sólo para secuencias de letras individuales sin formar palabras.
+
+    // Una manera sencilla es insertar * entre letras y números sólo cuando:
+    // - letra seguida de número: x2 -> x*2
+    latex = latex.replace(/([a-zA-Z])([0-9])/g, '$1*$2');
+    // - número seguido de letra: 2x -> 2*x
+    latex = latex.replace(/([0-9])([a-zA-Z])/g, '$1*$2');
+
+    // Finalmente, insertar * sólo entre letras cuando no formen funciones conocidas.
+    // Para eso, es mejor solo insertar * entre letras individuales, es decir, dos letras consecutivas,
+    // pero evitar si las letras son parte de funciones como 'log', 'sin', etc.
+
+    // La forma más simple es insertar * sólo entre letras que no están juntas en funciones.
+    // Por ejemplo, entre variables aisladas, como "xy" -> "x*y", pero no en "log" o "sin".
+
+    // Como un método rápido, sólo insertar * entre letras si ambas son una sola letra y no forman palabras.
+    // Si las letras forman palabras, no insertamos nada.
+
+    // Por simplicidad, y para evitar romper funciones, puedes comentar esta línea o eliminarla:
+    // latex = latex.replace(/([a-zA-Z])([a-zA-Z])/g, '$1*$2');
+
+    // Si quieres agregar esa lógica más avanzada, habría que hacer un parser o detectar funciones explícitamente,
+    // pero para la mayoría de casos basta eliminar esa línea y confiar en que el usuario escribe funciones correctamente.
+
+    return latex;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mathField = document.getElementById('editor-math');
+    const funcionInput = document.getElementById('funcion-input');
+
+    mathField.addEventListener('input', () => {
+        const latex = mathField.getValue();
+        const sympyExpr = latexToSympy(latex);
+        funcionInput.value = sympyExpr;
+        console.log('Función convertida a SymPy:', sympyExpr);
+    });
+
+    // Inicializar con el valor en el input si lo hay
+    if (funcionInput.value) {
+        // Aquí si quieres puedes convertir la expresión sympy a latex para el editor,
+        // pero si no tienes esa función, solo pon el valor directamente:
+        mathField.setValue(funcionInput.value);
+    }
+});
+
+</script>
+
+{% endblock %}
