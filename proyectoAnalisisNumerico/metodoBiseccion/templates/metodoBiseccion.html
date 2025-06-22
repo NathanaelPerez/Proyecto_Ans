@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Metodo Bisección | Análisis Numérico{% endblock %}
+{% block title %}Metodo Bisección | SolverPlus{% endblock %}
 {% load static %}
 
 {% block content %}
@@ -118,6 +118,12 @@
         <img src="data:image/png;base64,{{ grafica }}" class="img-fluid" />
     </div>
     {% endif %}
+    {% else %}
+        <p>Error aproximado (%): {{ ea|floatformat:4 }}</p>
+        <div class="alert alert-info mt-4 text-center">
+            <p>Si quieres ver los procesos y la gráfica, <strong>inicia sesión</strong>.</p>
+            <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
+        </div>
     {% endif %}
     {% endif %}
 </div>

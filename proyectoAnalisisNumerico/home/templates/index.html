@@ -1,21 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}Inicio | Análisis Numérico{% endblock %}
+{% block title %}Inicio | SolverPlus{% endblock %}
 {% load static %}
 
 {% block content %}
-<div class="text-center">
-    <h1 class="mb-4">Bienvenido a tu asistente de </h1><h1 class="h1-rojo">Análisis Numérico</h1>
-    <p class="lead mb-5">
+<div class="text-center" style="margin-bottom: 100px;">
+    <h1 class="mb-2">Bienvenido a </h1>
+    <img src="{% static 'Logo.png' %}" alt="Ícono Matemático" class="logo" style="width: 300px; margin-bottom: 10px;">
+
+    <p class="lead mt-2">
         Esta plataforma está diseñada para ayudarte a resolver ecuaciones numéricas de forma eficiente usando métodos como:
     </p>
+    <ul class="list-unstyled fs-5 mb-5">
+            <li><i class="fa-solid fa-square-root-variable" style="color: #f04770;"></i> Método de Bisección</li>
+            <li><i class="fa-solid fa-square-root-variable" style="color: #f04770;"></i>  Método de Richardson</li>
+    </ul>
 
-    <div class=" mb-4">
+    <div class=" mb-5">
         <h3 class="">¿Qué puedes hacer aquí?</h3>
         <ul class="list-unstyled fs-5 mt-3">
-            <li><i class="fa-solid fa-circle-check" style="color: #f04770;"></i> Estudiar los métodos paso a paso</li>
-            <li><i class="fa-solid fa-circle-check" style="color: #f04770;"></i> Resolver tus propios ejercicios</li>
-            <li><i class="fa-solid fa-circle-check" style="color: #f04770;"></i> Guardar y visualizar tus procesos anteriores</li>
-            <li><i class="fa-solid fa-circle-check" style="color: #f04770;"></i> Aprender con explicaciones claras y visuales</li>
+            <li><i class="fa-solid fa-book-open-reader" style="color: #f04770;"></i> Estudiar los métodos paso a paso</li>
+            <li><i class="fa-solid fa-calculator" style="color: #f04770;"></i> Resolver tus propios ejercicios</li>
+            <li><i class="fa-solid fa-floppy-disk" style="color: #f04770;"></i> Guardar y visualizar tus procesos anteriores</li>
+            <li><i class="fa-solid fa-chalkboard-user" style="color: #f04770;"></i> Aprender con explicaciones claras y visuales</li>
         </ul>
     </div>
 
@@ -24,7 +30,8 @@
         <div class="col">
             <div class="card shadow h-100" style="background: linear-gradient(135deg, #108AB1, #06D7A0); color: white;">
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title">🔹 Método Bisección</h4>
+                    <i class="fa-solid fa-square-root-variable fa-2xl mb-4"></i>
+                    <h4 class="card-title">Método Bisección</h4>
                     <p class="card-text flex-grow-1">
                         Un método confiable y sencillo que divide el intervalo en mitades para encontrar raíces de funciones continuas.
                     </p>
@@ -37,7 +44,8 @@
         <div class="col">
             <div class="card shadow h-100" style="background: linear-gradient(135deg, #F78C6A, #FFD167); color: white;">
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title">🔹 Método Richardson</h4>
+                    <i class="fa-solid fa-square-root-variable fa-2xl mb-4"></i>
+                    <h4 class="card-title">Método Richardson</h4>
                     <p class="card-text flex-grow-1">
                         Técnica utilizada para acelerar la convergencia en cálculos numéricos aplicando extrapolación.
                     </p>
@@ -50,7 +58,8 @@
         <div class="col">
             <div class="card shadow h-100" style="background: linear-gradient(135deg, #f56539, #f7aa93); color: white;">
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title">🔹 Método Bisección Info</h4>
+                    <i class="fa-solid fa-circle-info fa-2xl mb-4"></i>
+                    <h4 class="card-title">Método Bisección Info</h4>
                     <p class="card-text flex-grow-1">
                         Información detallada, ejemplos y teoría sobre el método de bisección para mejorar tu comprensión.
                     </p>
@@ -61,9 +70,10 @@
 
         <!-- Richardson Info -->
         <div class="col">
-            <div class="card shadow h-100" style="background: linear-gradient(135deg, #1f4037, #06D7A0); color: white;">
+            <div class="card shadow h-100" style="background: linear-gradient(135deg, #06D7A0, #2ed5a9); color: white;">
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title">🔹 Método Richardson Info</h4>
+                    <i class="fa-solid fa-circle-info fa-2xl mb-4"></i>
+                    <h4 class="card-title">Método Richardson Info</h4>
                     <p class="card-text flex-grow-1">
                         Explicaciones, ejemplos y recursos sobre la aplicación y teoría del método Richardson.
                     </p>
@@ -74,9 +84,10 @@
 
         <!-- Mis Procesos -->
         <div class="col">
-            <div class="card shadow h-100" style="background: linear-gradient(135deg, #ffc02c, #ffcc54); color: white;">
+            <div class="card shadow h-100" style="background: linear-gradient(135deg, #ffc02c, #ecc977); color: white;">
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title">🔹 Mis Procesos</h4>
+                    <i class="fa-solid fa-bookmark fa-2xl mb-4"></i>
+                    <h4 class="card-title">Mis Procesos</h4>
                     <p class="card-text flex-grow-1">
                         Guarda, revisa y gestiona todos tus procesos de cálculo para un fácil acceso y seguimiento.
                     </p>
@@ -87,9 +98,10 @@
 
         <!-- Sobre Nosotros -->
         <div class="col">
-            <div class="card shadow h-100" style="background: linear-gradient(135deg, #203a43, #99f2c8); color: white;">
+            <div class="card shadow h-100" style="background: linear-gradient(135deg, #108AB1, #7bebb7); color: white;">
                 <div class="card-body d-flex flex-column">
-                    <h4 class="card-title">🔹 Sobre Nosotros</h4>
+                    <i class="fa-solid fa-person fa-2xl mb-4"></i>
+                    <h4 class="card-title">Sobre Nosotros</h4>
                     <p class="card-text flex-grow-1">
                         Conoce al equipo detrás de esta plataforma y nuestra misión para ayudarte a aprender.
                     </p>

@@ -1,0 +1,139 @@
+body {
+    background: linear-gradient(135deg, #fff, #FFD167);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    padding: 1rem;
+}
+
+.login-container,
+.register-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1a1a1a;
+    border-radius: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    position: relative;
+}
+
+.login-container {
+    padding: 2rem 1.5rem;
+    max-width: 420px;
+}
+
+.register-container {
+    padding: 2.5rem;
+    max-width: 520px;
+}
+
+.login-container::before,
+.register-container::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    z-index: -1;
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    border-radius: 1.2rem;
+    filter: blur(10px);
+}
+
+h2, h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2575fc;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #5a0ec0, #1e60e0);
+}
+
+.extra-links {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.extra-links a {
+    color: #2575fc;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    margin: 0.3rem 0;
+}
+
+.extra-links a:hover {
+    text-decoration: underline;
+}
+
+.logo-math {
+    display: block;
+    margin: 0 auto 0 auto;
+    width: 300px;
+    height: auto;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .register-container {
+        padding: 2rem 1rem;
+    }
+
+    h2, h3 {
+        font-size: 1.3rem;
+    }
+
+    .form-control {
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container,
+    .register-container {
+        box-shadow: none;
+        border-radius: 0.5rem;
+    }
+
+    h2, h3 {
+        font-size: 1.4rem;
+    }
+
+    .logo-math {
+        width: 50px;
+    }
+}
+

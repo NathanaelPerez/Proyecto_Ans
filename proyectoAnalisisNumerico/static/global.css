@@ -15,6 +15,9 @@
   --bg-main: #f5f5f5;
   --radius: 10px;
   --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  --ff1: 'Chewy', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --ff2: 'Roboto', sans-serif;
 }
 
 
@@ -22,13 +25,13 @@
    TEXTO
    ============================ */
 .h1-rojo {
-    color: var(--yellow);
+    color: var(--pink);
 }
 .h2-rojo {
-    color: var(--yellow);
+    color: var(--pink);
 }
 .h3-rojo {
-    color: var(--yellow);
+    color: var(--pink);
 }
 
 /* ============================
@@ -36,13 +39,14 @@
    ============================ */
 body {
   background-color: var(--bg-main);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--ff2);
   color: var(--text-dark);
   margin: 0;
   padding: 0;
 }
 
 h1, h2, h3 {
+  font-family: var(--ff1);
   color: var(--pink);
 }
 
@@ -126,3 +130,7 @@ a:hover {
   margin-bottom: 1rem;
 }
 
+.logo {
+    width: 100px;
+    height: auto;
+}
