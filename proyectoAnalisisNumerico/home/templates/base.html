@@ -26,7 +26,7 @@
                     {% if user.perfil.foto_perfil %}
                         <img src="{{ user.perfil.foto_perfil.url }}" alt="Foto de perfil" class="profile-img">
                     {% endif %}
-                    <form action="#" method="post" class="ms-3">
+                        <form action="{% url 'logout' %}" method="post" class="ms-3">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-logout">Cerrar sesión</button>
                     </form>
@@ -52,8 +52,8 @@
                 <h6 class="mb-0">{{ user.get_full_name }}</h6>
                 <small class="text-muted">@{{ user.username }}</small>
                 <div class="d-flex justify-content-center gap-2 mt-3">
-                    <a href="#" class="btn btn-sm btn-outline-primary">Editar perfil</a>
-                    <form action="#" method="post">
+                    <a href="{% url 'editar_perfil' %}" class="btn btn-sm btn-outline-primary">Editar perfil</a>
+                    <form action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-danger">Cerrar sesión</button>
                     </form>
