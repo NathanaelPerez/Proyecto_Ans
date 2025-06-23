@@ -125,6 +125,14 @@
             <a href="{% url 'login' %}" class="btn btn-primary">Iniciar Sesión</a>
         </div>
     {% endif %}
+        {% if resultado %}
+    <div class="text-center mt-4">
+    <a class="btn btn-outline-primary fw-bold" 
+        href="{% url 'descargar_pdf_biseccion' %}?funcion={{ funcion|urlencode }}&xl={{ xl }}&xu={{ xu }}&ea={{ ea }}">
+        Descargar PDF del paso a paso
+    </a>
+    </div>
+    {% endif %}
     {% endif %}
 </div>
 

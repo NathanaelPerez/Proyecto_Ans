@@ -1,24 +1,30 @@
 import base64
-from django.shortcuts import render
-from . import richardson
-from django.http import HttpResponse
-from reportlab.lib.pagesizes import letter
-from PIL import Image
 import io
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import sympy as sp
+from django.shortcuts import render
+from django.http import HttpResponse
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image as RLImage
+from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet
+from PIL import Image
+import sympy as sp
+from . import richardson
 from .richardson import solve_extrapolacion_richardson_detallado
+from historial.models import HistorialCalculo
+
+from historial.models import HistorialCalculo  # Asegúrate de importar
 
 def calcular_richardson(request):
-    if request.method == 'POST':
-        expr = request.POST.get('expr', '')
-        x_val = request.POST.get('x_val', '')
-        h_val = request.POST.get('h_val', '')
-        order = request.POST.get('order', '1')
+    datos = request.POST if request.method == 'POST' else request.GET
 
-        # Validar que no vengan vacíos o incorrectos
+    expr = datos.get('expr', '')
+    x_val = datos.get('x_val', '')
+    h_val = datos.get('h_val', '')
+    order = datos.get('order', '1')
+
+    if expr and x_val and h_val and order:
         try:
             x_val = float(x_val)
             h_val = float(h_val)
@@ -55,6 +61,17 @@ def calcular_richardson(request):
         img_buffer = richardson.graficar_richardson(expr, x_val, h_val, order)
         img_base64 = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
 
+        # === GUARDAR EN HISTORIAL SI EL USUARIO ESTÁ AUTENTICADO ===
+        if request.user.is_authenticated:
+            HistorialCalculo.objects.create(
+                usuario=request.user,
+                metodo='richardson',
+                expr=expr,
+                x_val=x_val,
+                h_val=h_val,
+                order=order
+            )
+
         return render(request, 'metodo_Richardson.html', {
             'resultado': round(resultado, 12),
             'latex': latex.values.tolist(),
@@ -79,7 +96,6 @@ def latex_formula_to_image(latex_formula):
     plt.close(fig)
     buf.seek(0)
     return buf
-
 
 def descargar_pdf_richardson(request):
     if request.method == 'GET':

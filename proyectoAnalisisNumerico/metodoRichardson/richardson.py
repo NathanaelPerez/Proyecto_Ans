@@ -7,6 +7,7 @@ import pandas as pd
 import io
 from PIL import Image
 from sympy.parsing.sympy_parser import parse_expr
+from historial.models import HistorialCalculo
 
 x = sp.symbols('x')
 

@@ -1,23 +1,35 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Historial de Cálculos</h2>
-<table border="1">
-    <tr>
-        <th>Fecha</th>
-        <th>Método</th>
-        <th>Función</th>
-        <th>Resultado</th>
-    </tr>
-    {% for h in historial %}
-    <tr>
-        <td>{{ h.fecha }}</td>
-        <td>{{ h.get_metodo_display }}</td>
-        <td>{{ h.funcion }}</td>
-        <td>{{ h.resultado }}</td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="4">No hay cálculos registrados.</td></tr>
-    {% endfor %}
-</table>
+<h2>Historial de cálculos</h2>
+
+{% for registro in historial %}
+  <div class="historial-item" style="border:1px solid #ccc; padding:10px; margin-bottom:10px; padding: 50px;">
+    <p><strong>Método:</strong> {{ registro.metodo }}</p>
+    <p><strong>Función:</strong> {{ registro.expr }}</p>
+
+    {% if registro.metodo == 'richardson' %}
+      <p><strong>x:</strong> {{ registro.x_val }}</p>
+      <p><strong>h:</strong> {{ registro.h_val }}</p>
+      <p><strong>Orden:</strong> {{ registro.order }}</p>
+      <a href="{% url 'metodo_biseccion' %}?funcion={{ registro.expr|urlencode }}&xl={{ registro.xl|urlencode }}&xu={{ registro.xu|urlencode }}&ea={{ registro.ea|urlencode }}">
+        Ver cálculo de Richardson
+      </a>
+
+    {% elif registro.metodo == 'Bisección' %}
+      <p><strong>xl:</strong> {{ registro.xl }}</p>
+      <p><strong>xu:</strong> {{ registro.xu }}</p>
+      <p><strong>Error:</strong> {{ registro.ea }}</p>
+
+  <a href="{% url 'metodo_biseccion' %}?funcion={{ registro.expr|urlencode }}&xl={{ registro.xl }}&xu={{ registro.xu }}&ea={{ registro.ea }}">
+        Ver cálculo de Bisección
+      </a>
+    {% endif %}
+
+    <p><strong>Fecha:</strong> {{ registro.fecha }}</p>
+  </div>
+{% empty %}
+  <p>No tienes cálculos en el historial.</p>
+{% endfor %}
 {% endblock %}
