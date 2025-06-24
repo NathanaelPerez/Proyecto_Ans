@@ -91,8 +91,10 @@
                     <p class="card-text flex-grow-1">
                         Guarda, revisa y gestiona todos tus procesos de cálculo para un fácil acceso y seguimiento.
                     </p>
-                    <a href="#" class="btn btn-outline-light mt-auto mx-auto">Ver más</a>
-                </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'historial:historial' %}" class="btn btn-outline-light mt-auto mx-auto">Mis procesos</a>
+        {% endif %}                
+        </div>
             </div>
         </div>
 

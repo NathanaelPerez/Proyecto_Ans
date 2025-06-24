@@ -2,34 +2,84 @@
 {% load static %}
 
 {% block content %}
-<h2>Historial de cálculos</h2>
+<style>
+  /* Color rosa para los títulos (puedes ajustar el color) */
+  h2.mb-4 {
+    color: #d6336c; /* rosa fuerte */
+  }
+  .card-title {
+    color: #d6336c;
+  }
+</style>
 
-{% for registro in historial %}
-  <div class="historial-item" style="border:1px solid #ccc; padding:10px; margin-bottom:10px; padding: 50px;">
-    <p><strong>Método:</strong> {{ registro.metodo }}</p>
-    <p><strong>Función:</strong> {{ registro.expr }}</p>
+<h2 class="mb-4 text-center fw-bold">Historial de Cálculos</h2>
 
-    {% if registro.metodo == 'richardson' %}
-      <p><strong>x:</strong> {{ registro.x_val }}</p>
-      <p><strong>h:</strong> {{ registro.h_val }}</p>
-      <p><strong>Orden:</strong> {{ registro.order }}</p>
-      <a href="{% url 'metodo_biseccion' %}?funcion={{ registro.expr|urlencode }}&xl={{ registro.xl|urlencode }}&xu={{ registro.xu|urlencode }}&ea={{ registro.ea|urlencode }}">
-        Ver cálculo de Richardson
-      </a>
+<!-- Input para filtrar -->
+<div class="mb-4">
+  <input id="filtroInput" type="text" class="form-control" placeholder="Filtrar historial por función o método...">
+</div>
 
-    {% elif registro.metodo == 'Bisección' %}
-      <p><strong>xl:</strong> {{ registro.xl }}</p>
-      <p><strong>xu:</strong> {{ registro.xu }}</p>
-      <p><strong>Error:</strong> {{ registro.ea }}</p>
+{% if historial %}
+  <div class="row g-4" id="historialContainer">
+    {% for registro in historial %}
+      <div class="col-md-6 col-lg-4 historial-item">
+        <div class="card shadow-sm h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title mb-3">
+              <i class="bi bi-calculator"></i> Método: {{ registro.metodo|title }}
+            </h5>
+            <p class="card-text"><strong>Función:</strong> <code>{{ registro.expr }}</code></p>
 
-  <a href="{% url 'metodo_biseccion' %}?funcion={{ registro.expr|urlencode }}&xl={{ registro.xl }}&xu={{ registro.xu }}&ea={{ registro.ea }}">
-        Ver cálculo de Bisección
-      </a>
-    {% endif %}
+            {% if registro.metodo == 'richardson' %}
+              <p><strong>x:</strong> {{ registro.x_val }}</p>
+              <p><strong>h:</strong> {{ registro.h_val }}</p>
+              <p><strong>Orden:</strong> {{ registro.order }}</p>
 
-    <p><strong>Fecha:</strong> {{ registro.fecha }}</p>
+              <a href="{% url 'metodo_richardson' %}?funcion={{ registro.expr|urlencode }}&x={{ registro.x_val|default_if_none:'' }}&h={{ registro.h_val|default_if_none:'' }}&order={{ registro.order|default_if_none:'' }}" 
+                 class="btn btn-outline-primary mt-auto align-self-start">
+                 <i class="bi bi-eye"></i> Ver cálculo Richardson
+              </a>
+
+            {% elif registro.metodo == 'Bisección' %}
+              <p><strong>xl:</strong> {{ registro.xl }}</p>
+              <p><strong>xu:</strong> {{ registro.xu }}</p>
+              <p><strong>Error:</strong> {{ registro.ea }}</p>
+
+              <a href="{% url 'metodo_biseccion' %}?funcion={{ registro.expr|urlencode }}&xl={{ registro.xl|default_if_none:'' }}&xu={{ registro.xu|default_if_none:'' }}&ea={{ registro.ea|default_if_none:'' }}" 
+                 class="btn btn-outline-primary mt-auto align-self-start">
+                 <i class="bi bi-eye"></i> Ver cálculo Bisección
+              </a>
+            {% endif %}
+
+            <p class="text-muted mt-3 mb-0"><small><i class="bi bi-clock"></i> Fecha: {{ registro.fecha }}</small></p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
   </div>
-{% empty %}
-  <p>No tienes cálculos en el historial.</p>
-{% endfor %}
+{% else %}
+  <div class="alert alert-info text-center" role="alert">
+    No tienes cálculos en el historial.
+  </div>
+{% endif %}
+
+<script>
+  const filtroInput = document.getElementById('filtroInput');
+  filtroInput.addEventListener('input', function() {
+    const filtro = this.value.toLowerCase();
+    const items = document.querySelectorAll('.historial-item');
+    items.forEach(item => {
+      // Buscar texto en método y función
+      const metodo = item.querySelector('.card-title').textContent.toLowerCase();
+      const funcion = item.querySelector('.card-text code').textContent.toLowerCase();
+
+      if (metodo.includes(filtro) || funcion.includes(filtro)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+</script>
+
 {% endblock %}
