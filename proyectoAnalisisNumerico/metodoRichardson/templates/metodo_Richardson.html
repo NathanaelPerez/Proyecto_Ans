@@ -7,9 +7,10 @@
 
   <form method="post">
     {% csrf_token %}
-    <div class="form-group">
-      <label for="funcion">Función f(x):</label>
-      <input type="text" name="expr" id="funcion" class="form-control" placeholder="Ej: sin(x), x**2 + 3*x" value="{{ expr|default:'' }}" required>
+    <div class="form-group mb-3">
+      <label for="editor-math" class="fw-bold">Función f(x):</label>
+      <math-field id="editor-math" virtual-keyboard-mode="onfocus" class="w-100" style="min-height: 3rem;"></math-field>
+      <input type="hidden" name="expr" id="funcion" value="{{ expr|default:'' }}" required>
     </div>
 
     <div class="form-row row">
@@ -32,7 +33,7 @@
 
   {% if resultado %}
     <hr>
-    
+
     {% if user.is_authenticated %}
       <div class="card p-3">
         <p><strong>Fórmula utilizada para la derivada de orden {{ order }}:</strong></p>
@@ -60,19 +61,66 @@
       <a href="{% url 'descargar_pdf' %}?expr={{ expr|urlencode }}&x_val={{ x_val }}&h_val={{ h_val }}&order={{ order }}" class="btn btn-success mt-3">
         Descargar PDF
       </a>
-
     {% else %}
       <p><strong>Fórmula utilizada para la derivada de orden {{ order }}:</strong></p>
       <p>\[ {{ latex.0.1 }} \]</p>
 
-      <p class="text-danger mt-3">Para ver los resultados completos, por favor inicia sesión.</p>
+<div class="card bg-danger text-white text-center mt-4">
+  <div class="card-body">
+    <p class="mb-0">
+      Para ver los resultados completos, por favor 
+      <a href="{% url 'login' %}" class="text-white fw-bold text-decoration-underline">inicia sesión</a>.
+    </p>
+  </div>
+</div>
     {% endif %}
   {% endif %}
 </div>
 
-<!-- Cargar MathJax para renderizar fórmulas -->
+<!-- MathLive -->
+<script src="https://unpkg.com/mathlive"></script>
+
+<!-- MathJax para mostrar fórmulas -->
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+function latexToSympy(latex) {
+    latex = latex
+        .replace(/\\cdot|\\times/g, '*')
+        .replace(/\\div/g, '/')
+        .replace(/\\frac{([^}]*)}{([^}]*)}/g, '($1)/($2)')
+        .replace(/([a-zA-Z])\^([0-9]+)/g, '$1**$2')
+        .replace(/\\sqrt{([^}]*)}/g, 'sqrt($1)')
+        .replace(/\\left\(|\\right\)/g, '')
+        .replace(/\\pi/g, 'pi')
+        .replace(/\\log\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'log($1)')
+        .replace(/\\ln\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'log($1)')
+        .replace(/\\sin\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'sin($1)')
+        .replace(/\\cos\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'cos($1)')
+        .replace(/\\tan\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'tan($1)')
+        .replace(/\\exp\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'exp($1)')
+        .replace(/([a-zA-Z])([0-9])/g, '$1*$2')
+        .replace(/([0-9])([a-zA-Z])/g, '$1*$2');
+    return latex;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mathField = document.getElementById('editor-math');
+    const funcionInput = document.getElementById('funcion');
+
+    mathField.addEventListener('input', () => {
+        const latex = mathField.getValue();
+        const sympyExpr = latexToSympy(latex);
+        funcionInput.value = sympyExpr;
+        console.log('Función convertida a SymPy:', sympyExpr);
+    });
+
+    // Si ya hay valor, inicializar el mathField con ese contenido
+    if (funcionInput.value) {
+        mathField.setValue(funcionInput.value);
+    }
+});
 </script>
 {% endblock %}
