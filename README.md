@@ -1,73 +1,109 @@
-# SolverPlus: Solución de Ejercicios con Métodos Numéricos
+# SolverPlus
 
-![Python-logo](https://img.shields.io/badge/Python-3.10+-blue?logo=python)  
-![Django-logo](https://img.shields.io/badge/Django-4.x-green?logo=django)
-
-## 📌 Descripción del Proyecto
-
-**SolverPlus** es una plataforma desarrollada con **Python** y **Django** que permite resolver problemas utilizando métodos numéricos, enfocados en el **método de bisección** y la **extrapolación de Richardson** para derivadas. Está orientada tanto a estudiantes como a docentes que desean comprender y aplicar estos métodos de manera visual, interactiva y fundamentada.
+## Proyecto de Solución de Ejercicios con Métodos Numéricos
 
 ---
 
-## 📂 Contenidos
+### Descripción del Proyecto
+
+Este proyecto está desarrollado en **Python** y **Django**, y su objetivo es resolver ejercicios utilizando dos métodos numéricos fundamentales:
+
+- **Método de Bisección**
+- **Método de Extrapolación de Richardson**
+
+---
+
+### Contenidos
 
 - [Instalación](#instalación)  
 - [Uso](#uso)  
 - [Teoría de los Métodos](#teoría-de-los-métodos)  
   - [Método de Bisección](#método-de-bisección)  
   - [Método de Extrapolación de Richardson](#método-de-extrapolación-de-richardson)  
-- [Desarrolladores](#desarrolladores)  
-- [Licencia](#licencia)
+- [Integrantes](#integrantes)  
+- [Licencia](#licencia)  
 
 ---
 
-## ⚙️ Instalación
+### Instalación
 
-Sigue estos pasos para instalar y ejecutar el proyecto localmente:
+Para instalar y configurar el proyecto, sigue estos pasos:
 
 ```bash
-# Clona este repositorio
+# Clona este repositorio:
 git clone https://github.com/tu_usuario/solverplus.git
 
-# Entra al directorio del proyecto
+# Navega al directorio del proyecto:
 cd solverplus
 
-# Crea y activa un entorno virtual
+# Crea y activa un entorno virtual:
 python -m venv venv
-
-# En Windows
+# En Windows:
 venv\Scripts\activate
-
-# En Unix/macOS
+# En Linux/Mac:
 source venv/bin/activate
 
-# Instala las dependencias
+# Instala las dependencias:
 pip install -r requirements.txt
 
-# Realiza las migraciones
+# Realiza las migraciones:
 python manage.py migrate
 
-# Inicia el servidor de desarrollo
+# Inicia el servidor de desarrollo:
 python manage.py runserver
+```
 
-## 📖 Teoría de los Métodos
+### Uso
 
-### Método de Bisección
+Abre tu navegador y visita:  
+`http://localhost:8000`
 
-El método de bisección es un procedimiento numérico para encontrar raíces de funciones continuas. Consiste en dividir iterativamente un intervalo donde la función cambia de signo, reduciendo el rango hasta aproximar la raíz con la precisión deseada.
-
-### Método de Extrapolación de Richardson
-
-La extrapolación de Richardson es una técnica para acelerar la convergencia de una aproximación numérica. Dado un valor aproximado \( A(h) \) que depende de un parámetro \( h \), se combinan varios valores con diferentes \( h \) para obtener una aproximación más precisa, mejorando el orden de error. En este proyecto, se utiliza para calcular derivadas aproximadas con precisión mejorada, logrando un error del orden \( O(h^4) \).
+Sigue las instrucciones en la interfaz para resolver ejercicios usando los métodos disponibles.
 
 ---
 
-## 👥 Desarrolladores
+### Teoría de los Métodos
+
+#### Método de Bisección
+
+El método de bisección es una técnica numérica para encontrar raíces de una función continua en un intervalo \([a, b]\) donde la función cambia de signo.  
+El procedimiento consiste en:
+
+1. Dividir el intervalo por la mitad y evaluar la función en el punto medio \(c = \frac{a+b}{2}\).
+2. Determinar en cuál subintervalo \([a,c]\) o \([c,b]\) la función cambia de signo.
+3. Repetir el proceso en el subintervalo seleccionado hasta alcanzar la precisión deseada.
+
+Este método garantiza la convergencia a una raíz siempre que la función sea continua y se cumpla la condición del cambio de signo.
+
+---
+
+#### Método de Extrapolación de Richardson
+
+La extrapolación de Richardson es una técnica para mejorar la precisión de aproximaciones numéricas que dependen de un parámetro \(h\) (por ejemplo, tamaño de paso).  
+Si se tiene una aproximación \(A(h)\) que varía con \(h\), se puede obtener una mejor estimación combinando \(A(h)\) con valores de \(A\) calculados para diferentes valores de \(h\) mediante la fórmula:
+
+\[
+R = \frac{2^p A(h/2) - A(h)}{2^p - 1}
+\]
+
+donde \(p\) es el orden del error en la aproximación.  
+
+En este proyecto, se utiliza extrapolación de Richardson para calcular derivadas numéricas con orden de precisión mejorado \(O(h^4)\), lo que permite obtener resultados más precisos con menos error.
+
+---
+
+### Integrantes
 
 - **Pedro David Ramos García**  
-  Carnet: (RG21057)  
-  Responsabilidad: Implementación del método de bisección, desarrollo backend y documentación.
+  Carnet: RG21057  
+  Responsabilidades: Implementación del método de bisección y desarrollo frontend.
 
 - **Kevin Nathanael Granados Pérez**  
-  Carnet: (GP22006)  
-  Responsabilidad: Implementación del método de extrapolación de Richardson, pruebas y frontend.
+  Carnet: GP22006  
+  Responsabilidades: Implementación del método de extrapolación de Richardson y pruebas unitarias.
+
+---
+
+### Licencia
+
+Este proyecto está bajo la licencia [MIT](LICENSE).
