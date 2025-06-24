@@ -2,69 +2,129 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>
+    (function () {
+        try {
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                document.documentElement.classList.add('sidebar-collapsed');
+            }
+        } catch (e) {
+            console.warn("No se pudo aplicar el estado inicial:", e);
+        }
+    })();
+</script>
+
+    <link rel="icon" href="{% static 'Logo_Icono.png' %}" type="image/png">
     <meta charset="UTF-8" />
-    <title>{% block title %}Análisis Numérico{% endblock %}</title>
+    <title>{% block title %}SolverPlus{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'global.css' %}">
     <link rel="stylesheet" href="{% static 'index.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <script src="https://unpkg.com/mathlive"></script>
     <link rel="stylesheet" href="https://unpkg.com/mathlive/dist/mathlive.core.css">
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 <body>
 
-    <!-- Navbar superior -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}">Análisis Numérico</a>
-            <div class="d-flex align-items-center ms-auto">
-                {% if user.is_authenticated %}
-                    <div class="d-flex align-items-center navbar-user">
-                        <span class="me-2">Hola, {{ user.username }}</span>
-                        {% if user.perfil.foto_perfil %}
-                            <img src="{{ user.perfil.foto_perfil.url }}" alt="Foto de perfil" class="profile-img">
-                        {% endif %}
-                        <form action="{% url 'logout' %}" method="post" class="ms-3">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-logout">Cerrar sesión</button>
-                        </form>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+        <!-- Contenido alineado a la izquierda -->
+        <div class="d-flex align-items-center">
+            <!-- Botón del sidebar -->
+            <button class="btn btn-outline-light me-3" id="toggleSidebarBtn">
+                <i class="fas fa-bars"></i>
+            </button>
 
-                    </div>
-                {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-outline-light">Iniciar sesión</a>
-                {% endif %}
-            </div>
+            <!-- Texto de bienvenida -->
+            {% if user.is_authenticated %}
+                <span class="me-2" style="font-family: 'Chewy', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; font-size: 20px;">
+                    Bienvenido, {{ user.username }}!
+                </span>
+            {% endif %}
         </div>
+
+        <!-- Logo alineado a la derecha -->
+        <a href="{% url 'home' %}" class="d-flex align-items-center">
+            <img src="{% static 'Logo_Icono.png' %}" alt="Ícono Matemático" class="logo" style="height: 40px; width: 40px; margin-right: 10px;">
+        </a>
+    </div>
+</nav>
+
+<!-- Layout -->
+<div class="layout">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="d-flex flex-column p-3">
+        <div class="text-center mb-4">
+            {% if user.is_authenticated %}
+                {% if user.perfil.foto_perfil %}
+                    <img src="{{ user.perfil.foto_perfil.url }}" alt="Foto de perfil" class="rounded-circle mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'no_Foto.png' %}" alt="Sin foto" class="rounded-circle mb-2" style="width: 80px; height: 80px; object-fit: cover;">
+                {% endif %}
+                <h6 class="mb-0">{{ user.get_full_name }}</h6>
+                <small style="color: #F04770; font-family: 'Chewy', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px;">@{{ user.username }}</small>
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    <a href="{% url 'editar_perfil' %}" class="btn btn-sm btn-outline-primary">Editar perfil</a>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Cerrar sesión</button>
+                    </form>
+                </div>
+            {% else %}
+                <img src="{% static 'no_Foto.png' %}" alt="Sin foto" class="rounded-circle mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                <div class="mt-3">
+                    <a href="{% url 'login' %}" class="btn btn-sm btn-outline-primary">Iniciar sesión</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Enlaces comunes -->
+        <a href="{% url 'home' %}" class="nav-link px-3 py-2 text-center">Home</a>
+        <a href="{% url 'metodo_biseccion' %}" class="nav-link px-3 py-2 text-center">Método Bisección</a>
+        <a href="{% url 'informativa_biseccion' %}" class="nav-link px-3 py-2 text-center">Método Bisección Info</a>
+        <a href="{% url 'metodo_richardson' %}" class="nav-link px-3 py-2 text-center">Método Richardson</a>
+        <a href="{% url 'informativa_Richardson' %}" class="nav-link px-3 py-2 text-center">Método Richardson Info</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'historial:historial' %}" class="nav-link px-3 py-2 text-center">Mis procesos</a>
+        {% endif %}
+        <a href="{% url 'sobre_Nosotros' %}" class="nav-link px-3 py-2 text-center">Sobre Nosotros</a>
     </nav>
 
-    <!-- Layout con sidebar + contenido -->
-    <div class="layout">
-        <nav id="sidebar" class="d-flex flex-column">
-            <a href="{% url 'home' %}" class="nav-link px-3 py-2">Home</a>
-            <a href="{% url 'metodo_biseccion' %}" class="nav-link px-3 py-2">Método Bisección</a>
-            <a href="{% url 'informativa_biseccion' %}" class="nav-link px-3 py-2">Método Bisección Info</a>
-            <a href="{% url 'metodo_richardson' %}" class="nav-link px-3 py-2">Método Richardson</a>
-            <a href="{% url 'informativa_Richardson' %}" class="nav-link px-3 py-2">Método Richardson Info</a>
-            <a href="#" class="nav-link px-3 py-2">Mis procesos</a>
-            <a href="{% url 'sobre_Nosotros' %}" class="nav-link px-3 py-2">Sobre Nosotros</a>
-            <a href="{% url 'editar_perfil' %}" class="nav-link px-3 py-2">Editar Perfil</a>
-        </nav>
+    <!-- Contenido principal -->
+    <main id="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+</div>
 
-        <main id="main-content">
-            {% block content %}
-            <!-- Contenido específico de cada página -->
-            {% endblock %}
-        </main>
-    </div>
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 Proyecto de Análisis Numérico | Métodos de Bisección y Richardson</p>
+</footer>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Proyecto de Análisis Numérico | Métodos de Bisección y Richardson</p>
-    </footer>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById('toggleSidebarBtn');
+    const sidebar = document.getElementById('sidebar');
+    const layout = document.querySelector('.layout');
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    if (toggleBtn && sidebar && layout) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            layout.classList.toggle('sidebar-collapsed');
+        });
+    }
+});
+</script>
 </body>
 </html>

@@ -31,8 +31,9 @@ urlpatterns = [
     path('', include('metodoRichardsonInfo.urls')),
     path('', include('metodoRichardson.urls')),
     path('', include('sobreNosotros.urls')),
+    path('historial/', include('historial.urls')),
     path('editar-perfil/', include('editarperfil.urls')),
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
 ]
 
 if settings.DEBUG:

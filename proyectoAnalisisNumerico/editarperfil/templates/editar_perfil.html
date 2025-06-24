@@ -5,65 +5,33 @@
 {% block title %}Editar Perfil{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="card mx-auto shadow" style="max-width: 700px; border-radius: 1rem; background: linear-gradient(135deg, #ffffff, #f9f9f9);">
-        <div class="card-body">
-            <h3 class="text-center mb-4" style="color: #2575fc;">Editar mi Perfil</h3>
+<div class="container py-5" style="font-family: var(--ff2); background-color: var(--bg-main);">
+    <div class="card mx-auto" style="max-width: 720px; border-radius: var(--radius); box-shadow: var(--shadow); background: linear-gradient(135deg, #ffffff, #f5f5f5);">
+        <div class="card-body px-4 py-5">
+            <h3 class="text-center mb-4" style="color: var(--blue); font-family: var(--ff1); font-size: 2rem;">Editar mi Perfil</h3>
 
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
 
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="id_username" class="form-label">Usuario</label>
-                        {{ form.username|add_class:"form-control" }}
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="id_email" class="form-label">Correo electrónico</label>
-                        {{ form.email|add_class:"form-control" }}
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="id_nombres" class="form-label">Nombres</label>
-                        {{ form.nombres|add_class:"form-control" }}
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="id_apellidos" class="form-label">Apellidos</label>
-                        {{ form.apellidos|add_class:"form-control" }}
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="id_carrera" class="form-label">Carrera</label>
-                        {{ form.carrera|add_class:"form-control" }}
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="id_carnet" class="form-label">Carnet</label>
-                        {{ form.carnet|add_class:"form-control" }}
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="id_ciclo" class="form-label">Ciclo</label>
-                        {{ form.ciclo|add_class:"form-control" }}
-                    </div>
+                    {% for field in form %}
+                        {% if field.name != "foto_perfil" and field.name != "nueva_contrasena" %}
+                        <div class="col-md-6">
+                            <label for="{{ field.id_for_label }}" class="form-label text-dark">{{ field.label }}</label>
+                            {{ field|add_class:"form-control shadow-sm border-0" }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
 
                     <!-- FOTO DE PERFIL -->
                     <div class="col-md-6">
-                        <label class="form-label">Foto de perfil</label>
-
+                        <label class="form-label text-dark">Foto de perfil</label>
                         <div class="d-flex align-items-center gap-2">
-                            <!-- Input real oculto -->
                             <input type="file" name="{{ form.foto_perfil.name }}" id="id_foto_perfil" class="d-none" onchange="updateFileName()" />
-
-                            <!-- Botón personalizado -->
-                            <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('id_foto_perfil').click();">
-                                Seleccionar archivo
+                            <button type="button" class="btn btn-outline-primary btn-sm" style="color: var(--blue); border-color: var(--blue);" onclick="document.getElementById('id_foto_perfil').click();">
+                                <i class="fa fa-upload me-1"></i> Seleccionar archivo
                             </button>
-
-                            <!-- Texto del nombre del archivo -->
                             <span id="file-name" class="text-muted text-truncate" style="max-width: 200px;">
                                 {% if perfil.foto_perfil %}
                                     {{ perfil.foto_perfil.name|slice:"12:" }}
@@ -72,23 +40,23 @@
                                 {% endif %}
                             </span>
                         </div>
-
-                        <!-- Imagen previa -->
+                    {% if perfil.foto_perfil %}
                         <img 
                             id="preview-img"
-                            src="{% if perfil.foto_perfil %}{{ perfil.foto_perfil.url }}{% endif %}"
+                            src="{{ perfil.foto_perfil.url }}"
                             alt="Vista previa"
-                            class="mt-3 d-block mx-auto"
-                            style="max-width: 150px; border-radius: 0.5rem; {% if not perfil.foto_perfil %}display:none;{% endif %}"
+                            class="mt-3 d-block mx-auto rounded"
+                            style="max-width: 150px;"
                         >
+                    {% endif %}
                     </div>
 
                     <!-- CAMBIO DE CONTRASEÑA -->
                     <div class="col-12">
-                        <label for="id_nueva_contrasena" class="form-label">Nueva contraseña</label>
-                        <div class="input-group">
-                            {{ form.nueva_contrasena|add_class:"form-control" }}
-                            <button type="button" class="btn btn-outline-secondary" id="toggle-password">
+                        <label for="id_nueva_contrasena" class="form-label text-dark">Nueva contraseña</label>
+                        <div class="input-group shadow-sm">
+                            {{ form.nueva_contrasena|add_class:"form-control border-0" }}
+                            <button type="button" class="btn btn-outline-secondary" id="toggle-password" style="border-radius: 0 var(--radius) var(--radius) 0;">
                                 <i class="fa fa-eye-slash" id="eye-icon"></i>
                             </button>
                         </div>
@@ -98,7 +66,10 @@
 
                 <!-- BOTÓN GUARDAR -->
                 <div class="mt-4 text-center">
-                    <button type="submit" class="btn btn-primary px-5">Guardar cambios</button>
+                    <button type="submit" class="btn px-5 py-2"
+                        style="background-color: var(--pink); color: white; border-radius: var(--radius); font-family: var(--ff2); box-shadow: var(--shadow);">
+                        Guardar cambios
+                    </button>
                 </div>
             </form>
         </div>
@@ -107,7 +78,6 @@
 
 <!-- JS -->
 <script>
-    // Alternar visibilidad de la contraseña
     document.addEventListener("DOMContentLoaded", function () {
         const toggleBtn = document.getElementById("toggle-password");
         const passwordInput = document.getElementById("id_nueva_contrasena");
@@ -121,7 +91,6 @@
         });
     });
 
-    // Actualizar nombre del archivo y mostrar vista previa
     function updateFileName() {
         const input = document.getElementById('id_foto_perfil');
         const fileNameDisplay = document.getElementById('file-name');

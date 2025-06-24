@@ -1,76 +1,140 @@
 {% extends 'base.html' %}
+{% block title %}Método de Richardson | SolverPlus{% endblock %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-4">
-  <h2 class="mb-4">Método de Richardson</h2>
+  <h2 class="mb-4 fw-bold text-center">Método de Richardson</h2>
+<div class="justify-content-center text-center mb-3">
+  <img src="{% static 'calculadora.png' %}" alt="Foto calculadora" style="width: 150px; height: 150px;">
 
-  <form method="get">
-    <div class="form-group">
-      <label for="funcion">Función f(x):</label>
-      <input type="text" name="funcion" id="funcion" class="form-control" placeholder="Ej: sin(x)" value="{{ funcion|default:'' }}" required>
+  <!-- INFORMACIÓN DEL MÉTODO DE RICHARDSON -->
+  <div class="mt-3 px-3" style="max-width: 700px; margin: 0 auto;">
+    <p style="font-size: 1rem; color: var(--text-dark);">
+      El <strong>método de Richardson</strong> es una técnica de extrapolación que permite mejorar la precisión de aproximaciones numéricas,
+      especialmente en la estimación de derivadas, eliminando términos de error y acelerando la convergencia.
+    </p>
+    <a href="{% url 'informativa_Richardson' %}" class="fw-bold" style="color: var(--blue); font-size: 0.95rem;">
+      Saber más
+    </a>
+  </div>
+</div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group mb-3">
+      <label for="editor-math" class="fw-bold">Función f(x):</label>
+      <math-field id="editor-math" virtual-keyboard-mode="onfocus" class="w-100" style="min-height: 3rem;"></math-field>
+      <input type="hidden" name="expr" id="funcion" value="{{ expr|default:'' }}" required>
     </div>
-    <div class="form-group">
-      <label for="x">Valor de x:</label>
-      <input type="number" step="any" name="x" id="x" class="form-control" required>
+
+    <div class="form-row row">
+      <div class="form-group col-md-4">
+        <label for="x">Valor de x:</label>
+        <input type="number" step="any" name="x_val" id="x" class="form-control" value="{{ x_val|default:'' }}" required>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="h">Valor de h:</label>
+        <input type="number" step="any" name="h_val" id="h" class="form-control" value="{{ h_val|default:'' }}" required>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="orden">Orden de la derivada:</label>
+        <input type="number" name="order" id="orden" class="form-control" value="{{ order|default:'1' }}" min="1" max="4" required>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="h">Valor de h:</label>
-      <input type="number" step="any" name="h" id="h" class="form-control" required>
-    </div>
-    <div class="form-group">
-      <label for="tolerancia">Tolerancia (%):</label>
-      <input type="number" step="any" name="tolerancia" id="tolerancia" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Calcular</button>
+
+    <button type="submit" class="btn btn-success mt-3">Calcular</button>
   </form>
 
-  {% if error %}
-    <div class="alert alert-danger mt-4">{{ error }}</div>
-  {% endif %}
+  {% if resultado %}
+    <hr>
 
-  {% if tabla %}
-  <hr>
-  <h3>Tabla de Resultados</h3>
-  <table class="table table-bordered table-hover">
-    <thead class="thead-dark">
-      <tr>
-        <th>Iteración</th>
-        <th>h</th>
-        <th>Diferencias centradas (D)</th>
-        <th>Richardson (R)</th>
-        <th>Error relativo (%)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for fila in tabla %}
-      <tr>
-        <td>{{ fila.iteracion }}</td>
-        <td>{{ fila.h }}</td>
-        <td>{{ fila.D }}</td>
-        <td>{{ fila.R|default:"---" }}</td>
-        <td>{{ fila.error|default:"---" }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    {% if user.is_authenticated %}
+      <div class="card p-3">
+        <p><strong>Fórmula utilizada para la derivada de orden {{ order }}:</strong></p>
+        <p>\[ {{ latex.0.1 }} \]</p>
 
-  <h3 class="mt-4">Paso a Paso</h3>
-  {% for paso in pasos %}
-  <div class="card mb-3">
-    <div class="card-body">
-      <h5><strong>Iteración {{ paso.iteracion }}</strong></h5>
-      <p><strong>Diferencias centradas:</strong><br>{{ paso.diferencias }}</p>
-      <p><strong>Richardson:</strong><br>{{ paso.richardson }}</p>
-      <p><strong>Error relativo:</strong><br>{{ paso.error }}</p>
-    </div>
+        <p><strong>Función:</strong></p>
+        <p>\[ f(x) = {{ expr }} \]</p>
+
+        <p><strong>Error relativo calculado:</strong></p>
+        <p>\[ \varepsilon_a = \left| \frac{D(h/2) - D(h)}{D(h/2)} \right| \times 100\% = {{ error }}\% \]</p>
+
+        <p>Valor de la extrapolación:</p>
+        {% for fila in latex %}
+          {% if "Extrapolación" in fila.0 or "Sustituyendo" in fila.0 %}
+            <p>\[ {{ fila.1 }} \]</p>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <p><strong>Resultado final: {{ resultado }}</strong></p>
+
+      <h4>Gráfica</h4>
+      <img src="data:image/png;base64,{{ grafico }}" class="img-fluid" alt="Gráfica derivada">
+
+      <a href="{% url 'descargar_pdf' %}?expr={{ expr|urlencode }}&x_val={{ x_val }}&h_val={{ h_val }}&order={{ order }}" class="btn btn-success mt-3">
+        Descargar PDF
+      </a>
+    {% else %}
+      <p><strong>Fórmula utilizada para la derivada de orden {{ order }}:</strong></p>
+      <p>\[ {{ latex.0.1 }} \]</p>
+
+<div class="card bg-danger text-white text-center mt-4">
+  <div class="card-body">
+    <p class="mb-0">
+      Para ver los resultados completos, por favor 
+      <a href="{% url 'login' %}" class="text-white fw-bold text-decoration-underline">inicia sesión</a>.
+    </p>
   </div>
-  {% endfor %}
-
-  <h4 class="mt-5">Resultado Final</h4>
-  <p>La derivada estimada de <strong>f(x) = {{ funcion }}</strong> en <strong>x = {{ x }}</strong> es:</p>
-  <div class="alert alert-success">
-    <strong>{{ resultado }}</strong> con error menor o igual a {{ tolerancia }}%
-  </div>
+</div>
+    {% endif %}
   {% endif %}
 </div>
+
+<!-- MathLive -->
+<script src="https://unpkg.com/mathlive"></script>
+
+<!-- MathJax para mostrar fórmulas -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<script>
+function latexToSympy(latex) {
+    latex = latex
+        .replace(/\\cdot|\\times/g, '*')
+        .replace(/\\div/g, '/')
+        .replace(/\\frac{([^}]*)}{([^}]*)}/g, '($1)/($2)')
+        .replace(/([a-zA-Z])\^([0-9]+)/g, '$1**$2')
+        .replace(/\\sqrt{([^}]*)}/g, 'sqrt($1)')
+        .replace(/\\left\(|\\right\)/g, '')
+        .replace(/\\pi/g, 'pi')
+        .replace(/\\log\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'log($1)')
+        .replace(/\\ln\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'log($1)')
+        .replace(/\\sin\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'sin($1)')
+        .replace(/\\cos\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'cos($1)')
+        .replace(/\\tan\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'tan($1)')
+        .replace(/\\exp\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'exp($1)')
+        .replace(/([a-zA-Z])([0-9])/g, '$1*$2')
+        .replace(/([0-9])([a-zA-Z])/g, '$1*$2');
+    return latex;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mathField = document.getElementById('editor-math');
+    const funcionInput = document.getElementById('funcion');
+
+    mathField.addEventListener('input', () => {
+        const latex = mathField.getValue();
+        const sympyExpr = latexToSympy(latex);
+        funcionInput.value = sympyExpr;
+        console.log('Función convertida a SymPy:', sympyExpr);
+    });
+
+    // Si ya hay valor, inicializar el mathField con ese contenido
+    if (funcionInput.value) {
+        mathField.setValue(funcionInput.value);
+    }
+});
+</script>
 {% endblock %}

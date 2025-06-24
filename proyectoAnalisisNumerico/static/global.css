@@ -12,9 +12,12 @@
 
   --text-dark: #222;
   --text-light: #fff;
-  --bg-main: whitesmoke;
+  --bg-main: #f5f5f5;
   --radius: 10px;
   --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  --ff1: 'Chewy', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --ff2: 'Roboto', sans-serif;
 }
 
 
@@ -36,24 +39,29 @@
    ============================ */
 body {
   background-color: var(--bg-main);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--ff2);
   color: var(--text-dark);
   margin: 0;
   padding: 0;
 }
 
 h1, h2, h3 {
-  color: var(--dark-blue);
+  font-family: var(--ff1);
+  color: var(--pink);
+}
+
+h6 {
+  color: black;
 }
 
 a {
   color: var(--blue);
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 a:hover {
   color: var(--pink);
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* ============================
@@ -120,4 +128,9 @@ a:hover {
 
 .mb-1 {
   margin-bottom: 1rem;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
 }

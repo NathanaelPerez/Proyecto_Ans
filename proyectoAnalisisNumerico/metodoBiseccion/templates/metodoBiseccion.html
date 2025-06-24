@@ -1,47 +1,50 @@
 {% extends 'base.html' %}
-{% block title %}Metodo Bisección | Análisis Numérico{% endblock %}
+{% block title %}Metodo Bisección | SolverPlus{% endblock %}
 {% load static %}
 
 {% block content %}
 
 <div class="container">
-    <h1 class="mb-4 fw-bold text-center">Método de Bisección</h1>
+    <h1 class="mb-3 fw-bold text-center">Método de Bisección</h1>
+    <div class="justify-content-center" style="align-items: center; text-align: center;">
+      <img src="{% static 'calculadora.png' %}" alt="Foto calculadora" style="width: 150px; height: 150px;">
+    </div>
+    <p class="text-center">
+        El método de bisección es una técnica numérica que permite encontrar raíces de funciones continuas, dividiendo iterativamente el intervalo hasta alcanzar la precisión deseada.
+    </p>
+    <p class="text-center"><a href="{% url 'informativa_biseccion' %}" class="fw-bold">Saber más</a></p>
 
-    <form method="post" class="container py-3">
+    <form method="post" class="py-4">
         {% csrf_token %}
-
-        <!-- Fila superior: Editor visual centrado -->
         <div class="row justify-content-center mb-4">
-            <div class="col-12 col-md-6 text-center">
-                <label class="form-label text-center w-100 fw-bold">Editor visual de función (tipo Symbolab)</label>
-                <math-field id="editor-math" virtual-keyboard-mode="onfocus"></math-field>
+            <div class="col-12">
+                <label class="form-label fw-bold w-100">Ingresa tu ejercicio</label>
+                <math-field id="editor-math" virtual-keyboard-mode="onfocus" class="w-100" style="min-height: 3rem;"></math-field>
+                <input type="hidden" name="funcion" id="funcion-input" value="{{ funcion }}" required>
             </div>
         </div>
 
-        <!-- Fila inferior: Inputs de función, xl, xu, error -->
-        <div class="row g-3 justify-content-center">
-            <div class="col-12 col-md-3 text-center">
-                <label class="form-label w-100 fw-bold">f(x)</label>
-                <input type="text" name="funcion" id="funcion-input" value="{{ funcion }}" class="form-control" required>
-            </div>
-            <div class="col-12 col-md-2 text-center">
-                <label class="form-label w-100 fw-bold">xl</label>
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">xl</label>
                 <input type="number" step="any" name="xl" value="{{ xl }}" class="form-control" required>
             </div>
-            <div class="col-12 col-md-2 text-center">
-                <label class="form-label w-100 fw-bold">xu</label>
+            <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">xu</label>
                 <input type="number" step="any" name="xu" value="{{ xu }}" class="form-control" required>
             </div>
-            <div class="col-12 col-md-2 text-center">
-                <label class="form-label w-100 fw-bold">Error (%)</label>
+            <div class="col-12 col-md-4">
+                <label class="form-label fw-bold">Error (%)</label>
                 <input type="number" step="any" name="ea" value="{{ ea }}" class="form-control" required>
             </div>
-            <div class="col-12 col-md-3 d-flex align-items-end">
-                <button type="submit" class="btn btn-success w-100 fw-bold">Calcular</button>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-md-4">
+                <button type="submit" class="btn btn-success">Calcular</button>
             </div>
         </div>
     </form>
-
 
     {% if resultado %}
     <hr>
@@ -49,75 +52,82 @@
     <p>Iteraciones: {{ num_iter }}</p>
 
     {% if iteraciones %}
-    <div class="table-responsive mt-3">
-        <table class="table table-bordered table-sm">
-            <thead class="table-secondary">
-                <tr>
-                    <th>Iteración</th>
-                    <th>xl</th>
-                    <th>xu</th>
-                    <th>xr</th>
-                    <th>f(xl)</th>
-                    <th>f(xu)</th>
-                    <th>f(xr)</th>
-                    <th>Error (%)</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for it in iteraciones %}
-                <tr>
-                    <td>{{ it.iter }}</td>
-                    <td>{{ it.xl|floatformat:4 }}</td>
-                    <td>{{ it.xu|floatformat:4 }}</td>
-                    <td>{{ it.xr|floatformat:4 }}</td>
-                    <td>{{ it.f_xl|floatformat:4 }}</td>
-                    <td>{{ it.f_xu|floatformat:4 }}</td>
-                    <td>{{ it.f_xr|floatformat:4 }}</td>
-                    <td>{{ it.ea|floatformat:4 }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-10 col-lg-8">
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Iteración</th>
+                            <th>xl</th>
+                            <th>xu</th>
+                            <th>xr</th>
+                            <th>f(xl)</th>
+                            <th>f(xu)</th>
+                            <th>f(xr)</th>
+                            <th>Error (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for it in iteraciones %}
+                        <tr>
+                            <td>{{ it.iter }}</td>
+                            <td>{{ it.xl|floatformat:4 }}</td>
+                            <td>{{ it.xu|floatformat:4 }}</td>
+                            <td>{{ it.xr|floatformat:4 }}</td>
+                            <td>{{ it.f_xl|floatformat:4 }}</td>
+                            <td>{{ it.f_xu|floatformat:4 }}</td>
+                            <td>{{ it.f_xr|floatformat:4 }}</td>
+                            <td>{{ it.ea|floatformat:4 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-        {% if iteraciones %}
-        <div class="text-center mt-4">
-            <button id="btn-ver-proceso" class="btn btn-success">Ver proceso</button>
-        </div>
-
-        <br>
-        
-
-        <div id="contenedor-procesos" class="row mt-4 d-none">
-            {% for it in iteraciones %}
-            <div class="card mb-3">
-                <div class="card-body">
-                <h3 class="card-title text-center fw-bold">Iteración {{ it.iter }}</h3>
-                <div class="proceso-latex">
-                    {{ it.proceso|safe }}
+                <div class="text-center mt-4">
+                    <button id="btn-ver-proceso" class="btn btn-success">Ver proceso</button>
                 </div>
+
+                <div id="contenedor-procesos" class="row mt-4 d-none">
+                    {% for it in iteraciones %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="card-title text-center fw-bold">Iteración {{ it.iter }}</h3>
+                            <div class="proceso-latex">
+                                {{ it.proceso|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center mt-3 d-none" id="cerrar-proceso-btn">
+                    <button class="btn btn-danger" onclick="ocultarProceso()">Cerrar</button>
                 </div>
             </div>
-            {% endfor %}
-
         </div>
-
-        <div class="text-center mt-3 d-none" id="cerrar-proceso-btn">
-            <button class="btn btn-danger" onclick="ocultarProceso()">Cerrar</button>
-        </div>
-        <br>
-
-        {% endif %}
-
     </div>
 
-        <br>
-        <br>
+    {% endif %}
 
     {% if grafica %}
-    <div class="text-center">
+    <div class="text-center mt-4 mb-4">
         <img src="data:image/png;base64,{{ grafica }}" class="img-fluid" />
     </div>
     {% endif %}
+
+    {% if user.is_authenticated %}
+    <div class="text-center mt-4 mb-5">
+        <form action="{% url 'descargar_pdf_biseccion' %}" method="get" target="_blank">
+            <input type="hidden" name="funcion" value="{{ funcion }}">
+            <input type="hidden" name="xl" value="{{ xl }}">
+            <input type="hidden" name="xu" value="{{ xu }}">
+            <input type="hidden" name="ea" value="{{ ea }}">
+            <button type="submit" class="btn btn-primary fw-bold">
+                Descargar PDF paso a paso
+            </button>
+        </form>
+    </div>
     {% endif %}
     {% endif %}
 </div>
@@ -147,7 +157,6 @@
 
 <script>
 function latexToSympy(latex) {
-      // Primero convertimos las funciones con nombre completo
     latex = latex
         .replace(/\\cdot|\\times/g, '*')
         .replace(/\\div/g, '/')
@@ -161,34 +170,9 @@ function latexToSympy(latex) {
         .replace(/\\sin\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'sin($1)')
         .replace(/\\cos\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'cos($1)')
         .replace(/\\tan\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'tan($1)')
-        .replace(/\\exp\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'exp($1)');
-
-    // Ahora, para insertar el * entre variables, pero sólo entre variables simples (una letra),
-    // y evitar insertar entre funciones conocidas como 'log', 'sin', 'cos', 'tan', 'exp'
-    // Entonces, se hace sólo para secuencias de letras individuales sin formar palabras.
-
-    // Una manera sencilla es insertar * entre letras y números sólo cuando:
-    // - letra seguida de número: x2 -> x*2
-    latex = latex.replace(/([a-zA-Z])([0-9])/g, '$1*$2');
-    // - número seguido de letra: 2x -> 2*x
-    latex = latex.replace(/([0-9])([a-zA-Z])/g, '$1*$2');
-
-    // Finalmente, insertar * sólo entre letras cuando no formen funciones conocidas.
-    // Para eso, es mejor solo insertar * entre letras individuales, es decir, dos letras consecutivas,
-    // pero evitar si las letras son parte de funciones como 'log', 'sin', etc.
-
-    // La forma más simple es insertar * sólo entre letras que no están juntas en funciones.
-    // Por ejemplo, entre variables aisladas, como "xy" -> "x*y", pero no en "log" o "sin".
-
-    // Como un método rápido, sólo insertar * entre letras si ambas son una sola letra y no forman palabras.
-    // Si las letras forman palabras, no insertamos nada.
-
-    // Por simplicidad, y para evitar romper funciones, puedes comentar esta línea o eliminarla:
-    // latex = latex.replace(/([a-zA-Z])([a-zA-Z])/g, '$1*$2');
-
-    // Si quieres agregar esa lógica más avanzada, habría que hacer un parser o detectar funciones explícitamente,
-    // pero para la mayoría de casos basta eliminar esa línea y confiar en que el usuario escribe funciones correctamente.
-
+        .replace(/\\exp\s*\(?\s*([a-zA-Z0-9]+)\s*\)?/g, 'exp($1)')
+        .replace(/([a-zA-Z])([0-9])/g, '$1*$2')
+        .replace(/([0-9])([a-zA-Z])/g, '$1*$2');
     return latex;
 }
 
@@ -203,14 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Función convertida a SymPy:', sympyExpr);
     });
 
-    // Inicializar con el valor en el input si lo hay
     if (funcionInput.value) {
-        // Aquí si quieres puedes convertir la expresión sympy a latex para el editor,
-        // pero si no tienes esa función, solo pon el valor directamente:
         mathField.setValue(funcionInput.value);
     }
 });
-
 </script>
 
 {% endblock %}

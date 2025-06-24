@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Tus apps
+    # Apps creadas por nosotros
     'login',
     'registro',
     'widget_tweaks',
@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'metodoRichardsonInfo',
     'metodoRichardson',
     'sobreNosotros',
-    'editarperfil'
+    'editarperfil',
+    'historial',
 
 ]
 
@@ -81,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'db_analisisnumerico',
         'USER': 'root',
-        'PASSWORD': '192002',
+        'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
@@ -111,8 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # ======================
 # Internacionalización
 # ======================
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'es'
+TIME_ZONE = 'America/El_Salvador'
 USE_I18N = True
 USE_TZ = True
 
