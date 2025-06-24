@@ -32,11 +32,14 @@
 /* Sidebar */
 #sidebar {
     position: fixed;
-    top: 56px;          
-    bottom: 1px;         
+    top: 56px;
+    bottom: 0;
     width: 250px;
-    background-color: var(--dark-blue);
-    box-sizing: border-box;
+    background-color: #f8e9f0;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid var(--pink);
+    padding: 1rem 0;
+    overflow-y: auto;
     transition: transform 0.3s ease;
     z-index: 1100;
 }
@@ -44,6 +47,43 @@
 /* Sidebar oculto */
 #sidebar.collapsed {
     transform: translateX(-100%);
+}
+
+/* Links del sidebar */
+#sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 12px 20px;
+    font-family: var(--ff2);
+    font-size: 1rem;
+    color: var(--text-dark);
+    text-decoration: none;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+#sidebar .nav-link:hover,
+#sidebar .nav-link.active {
+    background-color: var(--pink);
+    color: white;
+    border-left: 4px solid var(--dark-blue);
+}
+
+/* Íconos opcionales */
+#sidebar .nav-link i {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* Encabezado de sección */
+#sidebar .sidebar-heading {
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    color: #666;
+    margin-top: 10px;
 }
 
 /* Main content */
@@ -57,17 +97,6 @@
 /* Cuando sidebar está oculto, quitar margen izquierdo */
 .layout.sidebar-collapsed #main-content {
     margin-left: 0 !important;
-}
-
-/* Links del sidebar */
-#sidebar .nav-link {
-    font-family: var(--ff2);
-    color: var(--text-light);
-}
-
-#sidebar .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--text-light);
 }
 
 /* Footer */
@@ -101,9 +130,9 @@ footer {
     box-shadow: 0 0 8px rgba(31, 64, 55, 0.9);
 }
 
-/* === MEDIA QUERIES para dispositivos pequeños === */
+/* === MEDIA QUERIES === */
 
-/* Tablet y abajo */
+/* Tablet */
 @media (max-width: 992px) {
     #sidebar {
         width: 200px;
@@ -117,12 +146,12 @@ footer {
 @media (max-width: 768px) {
     #sidebar {
         position: fixed;
-        top: 56px;              /* justo debajo del navbar */
+        top: 56px;
         bottom: 60px;
         left: 0;
         width: 250px;
-        height: calc(100vh - 56px); /* altura sin navbar */
-        padding: 1rem 1rem 1rem 1rem;
+        height: calc(100vh - 56px);
+        padding: 1rem;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
         z-index: 1100;
@@ -130,35 +159,33 @@ footer {
         overflow-y: auto;
     }
 
-    /* Cuando el sidebar está visible */
     .layout.sidebar-collapsed #sidebar {
         transform: translateX(0);
     }
 
-    /* Contenido principal toma todo el ancho */
     #main-content {
         margin-left: 0 !important;
         padding: 15px 10px;
         transition: margin-left 0.3s ease;
     }
 
-        footer {
-        height: auto;          /* altura automática para contenido */
-        padding: 15px 10px;    /* espacio interno */
-        line-height: 1.4;      /* línea más compacta y adaptable */
-        font-size: 0.9rem;     /* tamaño de texto un poco menor */
-        white-space: normal;   /* permitir salto de línea */
+    footer {
+        height: auto;
+        padding: 15px 10px;
+        line-height: 1.4;
+        font-size: 0.9rem;
+        white-space: normal;
     }
 }
 
-/* Pequeños móviles */
+/* Móviles pequeños */
 @media (max-width: 480px) {
     #sidebar {
         width: 220px;
     }
 
-        footer {
-        font-size: 0.85rem;    /* aún más pequeño */
+    footer {
+        font-size: 0.85rem;
         padding: 12px 8px;
     }
 }

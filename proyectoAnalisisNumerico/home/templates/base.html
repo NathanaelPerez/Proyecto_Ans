@@ -70,7 +70,7 @@
                     <img src="{% static 'no_Foto.png' %}" alt="Sin foto" class="rounded-circle mb-2" style="width: 80px; height: 80px; object-fit: cover;">
                 {% endif %}
                 <h6 class="mb-0">{{ user.get_full_name }}</h6>
-                <small style="color: white; font-family: 'Chewy', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px;">@{{ user.username }}</small>
+                <small style="color: #F04770; font-family: 'Chewy', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 20px;">@{{ user.username }}</small>
                 <div class="d-flex justify-content-center gap-2 mt-3">
                     <a href="{% url 'editar_perfil' %}" class="btn btn-sm btn-outline-primary">Editar perfil</a>
                     <form action="{% url 'logout' %}" method="post">

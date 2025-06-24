@@ -5,13 +5,11 @@
 
 {% block content %}
 <style>
-  /* Ajuste del espacio entre cards */
   .row.g-4 > .col, 
   .row.g-4 > div {
-    padding: 1rem; /* mayor espacio entre columnas */
+    padding: 1rem; 
   }
 
-  /* Cards con sombra, bordes redondeados y colores más suaves y combinados */
   .card {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
@@ -21,15 +19,13 @@
     transform: translateY(-6px);
   }
 
-  /* Colores personalizados para cards */
   .bg-primary {
-    background-color: #3b82f6 !important; /* azul vivo más moderno */
+    background-color: #3b82f6 !important; 
   }
   .bg-success {
-    background-color: #10b981 !important; /* verde suave */
+    background-color: #10b981 !important; 
   }
 
-  /* Card header con fuente más grande y negrita */
   .card-header {
     font-weight: 700;
     font-size: 1.25rem;
@@ -37,7 +33,6 @@
     border-bottom: 1px solid rgba(255 255 255 / 0.3);
   }
 
-  /* Texto dentro de la card más legible */
   .card-text strong {
     font-weight: 600;
   }
@@ -46,7 +41,6 @@
     line-height: 1.4;
   }
 
-    /* Headers para cada iteración */
   .card-header-iter1 { background-color: #2563eb !important; color: white; }
   .card-header-iter2 { background-color: #16a34a !important; color: white; }
   .card-header-iter3 { background-color: #db2777 !important; color: white; }
@@ -55,7 +49,6 @@
   .card-header-iter6 { background-color: #059669 !important; color: white; }
   .card-header-iter7 { background-color: #b45309 !important; color: white; }
 
-  /* Bodies para cada iteración */
   .card-body-iter1 { background-color: #dbeafe; color: #1e40af; }
   .card-body-iter2 { background-color: #dcfce7; color: #166534; }
   .card-body-iter3 { background-color: #fce7f3; color: #9d174d; }
@@ -90,7 +83,7 @@
   </ul>
 </div>
 
-<!-- Ventajas y Desventajas en dos columnas -->
+<!-- Ventajas y Desventajas -->
 <div class="row mt-4">
   <div class="col-md-6">
     <h2 class="text-center">Ventajas</h2>
