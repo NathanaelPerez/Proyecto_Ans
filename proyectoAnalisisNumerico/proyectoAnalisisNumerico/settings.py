@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ======================
 # Internacionalización
 # ======================
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'en'
 TIME_ZONE = 'America/El_Salvador'
 USE_I18N = True
 USE_TZ = True

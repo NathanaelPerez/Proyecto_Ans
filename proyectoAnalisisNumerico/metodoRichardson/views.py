@@ -19,10 +19,10 @@ from historial.models import HistorialCalculo
 def calcular_richardson(request):
     datos = request.POST if request.method == 'POST' else request.GET
 
-    expr = datos.get('funcion', '') 
-    x_val = datos.get('x', '')
-    h_val = datos.get('h', '')       
-    order = datos.get('order', '1')
+    expr = datos.get('expr', '')    
+    x_val = datos.get('x_val', '')  
+    h_val = datos.get('h_val', '')    
+    order = datos.get('order', '')   
 
     if expr and x_val and h_val and order:
         try:

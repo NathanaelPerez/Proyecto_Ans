@@ -35,8 +35,8 @@
               <p><strong>h:</strong> {{ registro.h_val }}</p>
               <p><strong>Orden:</strong> {{ registro.order }}</p>
 
-              <a href="{% url 'metodo_richardson' %}?funcion={{ registro.expr|urlencode }}&x={{ registro.x_val|default_if_none:'' }}&h={{ registro.h_val|default_if_none:'' }}&order={{ registro.order|default_if_none:'' }}" 
-                 class="btn btn-outline-primary mt-auto align-self-start">
+              <a href="{% url 'metodo_richardson' %}?expr={{ registro.expr|urlencode }}&x_val={{ registro.x_val|default_if_none:'' }}&h_val={{ registro.h_val|default_if_none:'' }}&order={{ registro.order|default_if_none:'' }}" 
+                class="btn btn-outline-primary mt-auto align-self-start">
                  <i class="bi bi-eye"></i> Ver cálculo Richardson
               </a>
 
